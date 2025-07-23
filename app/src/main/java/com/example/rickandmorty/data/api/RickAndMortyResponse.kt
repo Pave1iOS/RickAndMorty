@@ -2,8 +2,20 @@ package com.example.rickandmorty.data.api
 
 import com.google.gson.annotations.SerializedName
 
-data class RickAndMortyResponse(
-    @SerializedName("id") val id: Long,
-    @SerializedName("title") val title: String,
-    @SerializedName("image") val image: ByteArray
+data class AllCharacters(
+
+    @SerializedName("name")
+    val name: String,
+
+    @SerializedName("species")
+    val species: String,
+
+    @SerializedName("status")
+    val status: String,
+
+    @SerializedName("gender")
+    val gender: String,
+
+    @SerializedName("image")
+    val image: String
 )
