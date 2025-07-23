@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+
+    kotlin("kapt")
 }
 
 android {
@@ -40,6 +42,32 @@ android {
 }
 
 dependencies {
+
+    //Compose
+    implementation("androidx.compose.ui:ui-tooling-preview:1.8.3")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.8.3")
+
+    //Coroutine
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    // network log
+    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+
+    // Scope (lifecycle & viewModel)
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+
+    // DI
+    implementation("com.google.dagger:dagger:2.51.1")
+    kapt("com.google.dagger:dagger-compiler:2.51.1")
+
+    // Json converter
+    implementation("com.google.code.gson:gson:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+
+    // Network
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
