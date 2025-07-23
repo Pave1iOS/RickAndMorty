@@ -2,7 +2,7 @@ package com.example.rickandmorty.data.api
 
 import com.google.gson.annotations.SerializedName
 
-data class AllCharacters(
+data class Character(
 
     @SerializedName("name")
     val name: String,
