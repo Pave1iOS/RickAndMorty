@@ -47,6 +47,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview:1.8.3")
     debugImplementation("androidx.compose.ui:ui-tooling:1.8.3")
     implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("androidx.compose.foundation:foundation:1.5.0")
+
 
     //Coroutine
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")

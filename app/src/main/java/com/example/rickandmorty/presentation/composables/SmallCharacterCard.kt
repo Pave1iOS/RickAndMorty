@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,7 +42,7 @@ fun SmallCharacterCard(
 
     Card(
         modifier = modifier
-            .width(200.dp)
+            .fillMaxWidth()
             .height(300.dp)
     ) {
 
@@ -66,7 +67,7 @@ fun SmallCharacterCard(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .clip(RoundedCornerShape(topStart = 12.dp))
-                    .background(Color.Black)
+                    .background(colorResource(R.color.black))
                     .padding(horizontal = 6.dp, vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
@@ -91,7 +92,7 @@ fun SmallCharacterCard(
             modifier = Modifier
                 .weight(0.3f)
                 .fillMaxWidth()
-                .background(Color.DarkGray),
+                .background(colorResource(R.color.secondary)),
             contentAlignment = Alignment.Center
         ) {
             Column(
@@ -100,7 +101,7 @@ fun SmallCharacterCard(
                 Text(
                     text = character.name,
                     style = MaterialTheme.typography.titleMedium,
-                    color = Color.White
+                    color = colorResource(R.color.text_name)
                 )
 
                 Spacer(
@@ -111,7 +112,7 @@ fun SmallCharacterCard(
                 Text(
                     text = "${character.gender} | ${character.species}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color.LightGray
+                    color = colorResource(R.color.text_secondary)
                 )
             }
 

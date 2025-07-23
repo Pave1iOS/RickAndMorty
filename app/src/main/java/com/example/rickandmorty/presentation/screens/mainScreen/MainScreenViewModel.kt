@@ -1,4 +1,4 @@
-package com.example.rickandmorty
+package com.example.rickandmorty.presentation.screens.mainScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class RickAndMortyViewModel @Inject constructor(
+class MainScreenViewModel @Inject constructor(
     private val repository: NetworkRepository
 ): ViewModel() {
 
