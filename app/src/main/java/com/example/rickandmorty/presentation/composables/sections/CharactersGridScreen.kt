@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rickandmorty.data.api.Character
-import com.example.rickandmorty.presentation.composables.SmallCharacterCard
+import com.example.rickandmorty.presentation.composables.components.SmallCharacterCard
 
 @Composable
 fun CharactersGridScreen(characters: List<Character>) {

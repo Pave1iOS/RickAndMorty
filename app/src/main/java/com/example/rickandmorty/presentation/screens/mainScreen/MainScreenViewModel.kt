@@ -13,14 +13,28 @@ class MainScreenViewModel @Inject constructor(
     private val repository: NetworkRepository
 ): ViewModel() {
 
-    private val _characters = MutableStateFlow<Result<List<Character>>?>(null)
-    val characters: StateFlow<Result<List<Character>>?> = _characters
+    private val _characters = MutableStateFlow<List<Character>>(emptyList())
+    val characters: StateFlow<List<Character>> = _characters
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage
 
     fun getAllCharacters() {
-
         viewModelScope.launch {
-            _characters.value = null
-            _characters.value = repository.getListCharacters()
+            _isLoading.value = true
+            _errorMessage.value = null
+
+            try {
+                val result = repository.getListCharacters().getOrThrow()
+                _characters.value = result
+            } catch (e: Throwable) {
+                _errorMessage.value = "Ошибка загрузки данных: ${e.localizedMessage}"
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.rickandmorty.helpers
+package com.example.rickandmorty.utils
 
 object LogSource {
     const val NETWORK = "🛜NETWORK ->"

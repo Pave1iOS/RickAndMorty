@@ -4,8 +4,10 @@ import android.app.Application
 import com.example.rickandmorty.presentation.screens.mainScreen.MainScreen
 import dagger.BindsInstance
 import dagger.Component
+import javax.inject.Singleton
 
-@Component(modules = [NetworkModule::class, ViewModelModule::class])
+@Singleton
+@Component(modules = [AppModule::class, ViewModelModule::class])
 interface AppComponent {
     fun inject(activity: MainScreen)
 

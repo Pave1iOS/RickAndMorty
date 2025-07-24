@@ -1,5 +1,6 @@
 package com.example.rickandmorty.data.DI
 
+import android.util.Log
 import com.example.rickandmorty.data.api.RickAndMortyAPI
 import com.example.rickandmorty.domain.NetworkRepository
 import com.google.gson.GsonBuilder
@@ -12,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
-class NetworkModule {
+class AppModule {
 
     @Provides
     @Singleton
@@ -42,9 +43,10 @@ class NetworkModule {
         return retrofit.create(RickAndMortyAPI::class.java)
     }
 
-    @Provides
     @Singleton
     fun NetworkRepository(api: RickAndMortyAPI): NetworkRepository {
+        Log.d("Dagger", "created")
+
         return NetworkRepository(api)
     }
 
