@@ -41,7 +41,11 @@ fun MainScreenContent(
         Box(
             modifier = Modifier
         ) {
-            CharactersGridScreen(characters)
+            CharactersGridScreen(
+                modifier = Modifier
+                    .padding(top = 10.dp),
+                characters = characters
+            )
 
 
             ButtonFilter(

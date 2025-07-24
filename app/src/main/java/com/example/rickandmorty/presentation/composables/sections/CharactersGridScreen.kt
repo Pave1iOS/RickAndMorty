@@ -16,9 +16,13 @@ import com.example.rickandmorty.data.api.Character
 import com.example.rickandmorty.presentation.composables.components.SmallCharacterCard
 
 @Composable
-fun CharactersGridScreen(characters: List<Character>) {
+fun CharactersGridScreen(
+    modifier: Modifier = Modifier,
+    characters: List<Character>
+) {
     LazyVerticalGrid(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize(),
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -54,6 +58,6 @@ fun CharactersGridScreenPreview() {
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        CharactersGridScreen(charactersList)
+        CharactersGridScreen(characters = charactersList)
     }
 }
