@@ -43,15 +43,6 @@ class AppModule {
         return retrofit.create(RickAndMortyAPI::class.java)
     }
 
-    @Singleton
-    fun NetworkRepository(api: RickAndMortyAPI): NetworkRepository {
-        Log.d("Dagger", "created")
-
-        return NetworkRepository(api)
-    }
-
-
-
     companion object {
         private const val BASE_URL = "https://rickandmortyapi.com/api/"
     }
