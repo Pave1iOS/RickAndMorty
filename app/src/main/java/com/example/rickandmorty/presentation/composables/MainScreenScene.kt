@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rickandmorty.data.api.Character
+import com.example.rickandmorty.presentation.composables.components.ButtonFilter
 import com.example.rickandmorty.presentation.composables.sections.CharactersGridScreen
 import com.example.rickandmorty.presentation.composables.sections.SearchBar
 import com.example.rickandmorty.theme.RickAndMortyTheme
@@ -36,7 +37,20 @@ fun MainScreenContent(
             query = "",
             onQueryChange = {}
         )
-        CharactersGridScreen(characters)
+
+        Box(
+            modifier = Modifier
+        ) {
+            CharactersGridScreen(characters)
+
+
+            ButtonFilter(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 25.dp, bottom = 25.dp)
+            )
+        }
+
     }
 }
 

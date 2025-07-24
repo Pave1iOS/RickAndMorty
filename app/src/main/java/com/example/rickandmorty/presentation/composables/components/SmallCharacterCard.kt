@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.rickandmorty.R
 import com.example.rickandmorty.data.api.Character
-import com.example.rickandmorty.presentation.resources.ContentDescriptions
+import com.example.rickandmorty.utils.ContentDescriptions
 
 @Composable
 fun SmallCharacterCard(
