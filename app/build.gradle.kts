@@ -43,6 +43,10 @@ android {
 
 dependencies {
 
+    // paging
+    implementation ("androidx.paging:paging-runtime:3.3.6")
+    implementation ("androidx.paging:paging-compose:3.3.6")
+    
     //Compose
     implementation("androidx.compose.ui:ui-tooling-preview:1.8.3")
     debugImplementation("androidx.compose.ui:ui-tooling:1.8.3")

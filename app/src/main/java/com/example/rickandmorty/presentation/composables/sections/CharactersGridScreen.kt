@@ -12,13 +12,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.rickandmorty.data.api.Character
+import androidx.paging.compose.LazyPagingItems
+import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.presentation.composables.components.SmallCharacterCard
+import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
 
 @Composable
 fun CharactersGridScreen(
     modifier: Modifier = Modifier,
-    characters: List<Character>
+    rickAndMortyCharacters: LazyPagingItems<RickAndMortyCharacter>
 ) {
     LazyVerticalGrid(
         modifier = modifier
@@ -28,8 +30,12 @@ fun CharactersGridScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(characters) {
-            SmallCharacterCard(character = it)
+        items(rickAndMortyCharacters.itemCount) {
+            val character = rickAndMortyCharacters[it]
+
+            if (character != null)
+            SmallCharacterCard(rickAndMortyCharacter = character)
+
         }
     }
 }
@@ -38,7 +44,7 @@ fun CharactersGridScreen(
 @Composable
 fun CharactersGridScreenPreview() {
 
-    val fakeCharacter = Character(
+    val fakeRickAndMortyCharacter = RickAndMortyCharacter(
         name = "Name",
         species = "Species",
         status = "Status",
@@ -47,17 +53,19 @@ fun CharactersGridScreenPreview() {
     )
 
     val charactersList = List(10) { index ->
-        fakeCharacter.copy(
+        fakeRickAndMortyCharacter.copy(
             name = "Name $index",
             image = "https://rickandmortyapi.com/api/character/avatar/${index + 1}.jpeg"
         )
     }
+
+    val pagingItems = rememberFakeLazyPagingItems(charactersList)
 
     Box(
         modifier = Modifier
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        CharactersGridScreen(characters = charactersList)
+        CharactersGridScreen(rickAndMortyCharacters = pagingItems)
     }
 }

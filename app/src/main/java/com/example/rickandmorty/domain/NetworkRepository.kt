@@ -1,7 +1,9 @@
 package com.example.rickandmorty.domain
 
 import android.util.Log
-import com.example.rickandmorty.data.api.Character
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.data.api.RickAndMortyAPI
 import com.example.rickandmorty.utils.LogSource
 import javax.inject.Inject
@@ -10,15 +12,11 @@ import javax.inject.Singleton
 @Singleton
 class NetworkRepository @Inject constructor(private val api: RickAndMortyAPI) {
 
-    suspend fun getListCharacters(): Result<List<Character>> {
-        return try {
-            val response = api.getCharacters()
-            Log.i(TAG, "${LogSource.NETWORK} - getListCharacters = [$response]")
-            Result.success(response.results)
-        } catch (e: Exception) {
-            Log.e(TAG, "${LogSource.NETWORK} - ${e.message}")
-            Result.failure(e)
-        }
+    fun getPagingCharacter(): Pager<Int, RickAndMortyCharacter> {
+        return Pager(
+            config = PagingConfig(pageSize = 20),
+            pagingSourceFactory = { CharacterPagingSource(api) }
+        )
     }
 
     companion object {

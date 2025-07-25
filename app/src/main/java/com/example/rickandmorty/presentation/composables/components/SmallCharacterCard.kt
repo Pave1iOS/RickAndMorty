@@ -28,13 +28,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.rickandmorty.R
-import com.example.rickandmorty.data.api.Character
+import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.utils.ContentDescriptions
 
 @Composable
 fun SmallCharacterCard(
     modifier: Modifier = Modifier,
-    character: Character
+    rickAndMortyCharacter: RickAndMortyCharacter
 ) {
 
     Card(
@@ -54,8 +54,8 @@ fun SmallCharacterCard(
                     .fillMaxSize()
                     .background(Color.Yellow)
                     .clip(RoundedCornerShape(8.dp)),
-                model = character.image,
-                contentDescription = ContentDescriptions.imageDescription(character.name),
+                model = rickAndMortyCharacter.image,
+                contentDescription = ContentDescriptions.imageDescription(rickAndMortyCharacter.name),
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(R.drawable.placeholder)
             )
@@ -74,11 +74,11 @@ fun SmallCharacterCard(
                     modifier = Modifier
                         .size(8.dp),
                     painter = painterResource(R.drawable.green_circle),
-                    contentDescription = ContentDescriptions.statusDescription(character.status)
+                    contentDescription = ContentDescriptions.statusDescription(rickAndMortyCharacter.status)
                 )
 
                 Text(
-                    text = character.status,
+                    text = rickAndMortyCharacter.status,
                     color = Color.White,
                     style = MaterialTheme.typography.labelSmall
                 )
@@ -96,7 +96,7 @@ fun SmallCharacterCard(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = character.name,
+                    text = rickAndMortyCharacter.name,
                     style = MaterialTheme.typography.titleMedium,
                     color = colorResource(R.color.text_name)
                 )
@@ -107,7 +107,7 @@ fun SmallCharacterCard(
                 )
 
                 Text(
-                    text = "${character.gender} | ${character.species}",
+                    text = "${rickAndMortyCharacter.gender} | ${rickAndMortyCharacter.species}",
                     style = MaterialTheme.typography.bodySmall,
                     color = colorResource(R.color.text_secondary)
                 )
@@ -123,7 +123,7 @@ fun SmallCharacterCard(
 @Composable
 fun SmallCharacterCardPreview() {
 
-    val fakeCharacter = Character(
+    val fakeRickAndMortyCharacter = RickAndMortyCharacter(
         "Name",
         "Species",
         "status",
@@ -136,6 +136,6 @@ fun SmallCharacterCardPreview() {
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        SmallCharacterCard(character = fakeCharacter)
+        SmallCharacterCard(rickAndMortyCharacter = fakeRickAndMortyCharacter)
     }
 }

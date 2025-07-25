@@ -2,28 +2,27 @@ package com.example.rickandmorty.presentation.composables
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.rickandmorty.data.api.Character
+import androidx.paging.compose.LazyPagingItems
+import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.presentation.composables.components.ButtonFilter
 import com.example.rickandmorty.presentation.composables.sections.CharactersGridScreen
 import com.example.rickandmorty.presentation.composables.sections.SearchBar
 import com.example.rickandmorty.theme.RickAndMortyTheme
+import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
 
 @Composable
 fun MainScreenContent(
-    characters: List<Character>
+    rickAndMortyCharacters: LazyPagingItems<RickAndMortyCharacter>
 ) {
 
     Column(
@@ -44,7 +43,7 @@ fun MainScreenContent(
             CharactersGridScreen(
                 modifier = Modifier
                     .padding(top = 10.dp),
-                characters = characters
+                rickAndMortyCharacters = rickAndMortyCharacters
             )
 
 
@@ -62,8 +61,8 @@ fun MainScreenContent(
 @Composable
 fun MainScreenContentPreview() {
 
-    val fakeCharacters = List(6) {
-        Character(
+    val fakeRickAndMortyCharacters = List(6) {
+        RickAndMortyCharacter(
             name = "Name $it",
             species = "Human",
             status = "Alive",
@@ -71,6 +70,8 @@ fun MainScreenContentPreview() {
             image = "https://rickandmortyapi.com/api/character/avatar/${it + 1}.jpeg"
         )
     }
+
+    val pagingItems = rememberFakeLazyPagingItems(fakeRickAndMortyCharacters)
 
     RickAndMortyTheme {
 
@@ -82,7 +83,7 @@ fun MainScreenContentPreview() {
                 .padding(topInset),
             contentAlignment = Alignment.Center
         ) {
-            MainScreenContent(characters = fakeCharacters)
+            MainScreenContent(rickAndMortyCharacters = pagingItems)
         }
     }
 

@@ -1,6 +1,5 @@
 package com.example.rickandmorty.data.api
 
-import android.icu.text.IDNA
 import com.google.gson.annotations.SerializedName
 
 data class CharacterResponse(
@@ -8,7 +7,7 @@ data class CharacterResponse(
     val info: Info,
 
     @SerializedName("results")
-    val results: List<Character>
+    val results: List<RickAndMortyCharacter>
 )
 
 data class Info(
@@ -22,7 +21,7 @@ data class Info(
     val prev: String?
 )
 
-data class Character(
+data class RickAndMortyCharacter(
 
     @SerializedName("name")
     val name: String,
