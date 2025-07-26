@@ -73,7 +73,7 @@ fun MainScreenContent(
                 Box(
                     modifier = Modifier
                         .size(80.dp)
-                        .padding(top = 8.dp),
+                        .padding(top = 12.dp),
                     contentAlignment = Alignment.TopCenter
                 ) {
                     RefreshIcon(
