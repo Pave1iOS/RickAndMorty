@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
@@ -23,6 +24,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.presentation.composables.components.ButtonFilter
+import com.example.rickandmorty.presentation.composables.components.RefreshIcon
 import com.example.rickandmorty.presentation.composables.sections.CharactersGridScreen
 import com.example.rickandmorty.presentation.composables.sections.SearchBar
 import com.example.rickandmorty.theme.RickAndMortyTheme
@@ -64,6 +66,19 @@ fun MainScreenContent(
                         delay(100)
                     }
                     isRefreshing = false
+                }
+            },
+            indicator = { state, _ ->
+                // Центрируем кастомный индикатор
+                Box(
+                    modifier = Modifier
+                        .size(80.dp)
+                        .padding(top = 8.dp),
+                    contentAlignment = Alignment.TopCenter
+                ) {
+                    RefreshIcon(
+                        isRefreshing = state.isRefreshing
+                    )
                 }
             }
         ) {
