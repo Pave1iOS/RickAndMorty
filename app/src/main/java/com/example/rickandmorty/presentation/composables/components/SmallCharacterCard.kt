@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -96,6 +97,7 @@ fun SmallCharacterCard(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
+                    textAlign = TextAlign.Center,
                     text = rickAndMortyCharacter.name,
                     style = MaterialTheme.typography.titleMedium,
                     color = colorResource(R.color.text_name)
@@ -107,6 +109,7 @@ fun SmallCharacterCard(
                 )
 
                 Text(
+                    textAlign = TextAlign.Center,
                     text = "${rickAndMortyCharacter.gender} | ${rickAndMortyCharacter.species}",
                     style = MaterialTheme.typography.bodySmall,
                     color = colorResource(R.color.text_secondary)
