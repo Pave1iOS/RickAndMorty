@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">RickAndMorty</string>
+    <string name="close">Закрыть</string>
+    <string name="error">Ошибка</string>
+    <string name="loading">Загрузка</string>
+    <string name="search_placeholder">Поиск персонажа</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
 </resources>

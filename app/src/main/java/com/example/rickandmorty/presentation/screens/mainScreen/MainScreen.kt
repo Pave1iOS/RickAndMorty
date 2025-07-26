@@ -7,11 +7,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.rickandmorty.App
+import com.example.rickandmorty.R
 import com.example.rickandmorty.presentation.composables.MainScreenContent
 import com.example.rickandmorty.presentation.composables.components.ErrorWindow
 import com.example.rickandmorty.presentation.composables.components.LoadIndicator
@@ -59,7 +61,8 @@ class MainScreen : ComponentActivity() {
 
                             val error = characters.loadState.refresh as LoadState.Error
 
-                            ErrorWindow(text = error.error.localizedMessage ?: "Неизвестная ошибка")
+                            ErrorWindow(text = error.error.localizedMessage
+                                ?: stringResource(R.string.unknown_error))
                         }
 
                         else -> {
