@@ -1,8 +1,19 @@
 <resources>
+
+<!-- strings -->
     <string name="app_name">RickAndMorty</string>
     <string name="close">Закрыть</string>
     <string name="error">Ошибка</string>
     <string name="loading">Загрузка</string>
     <string name="search_placeholder">Поиск персонажа</string>
     <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="character_image">Изображение персонажа - $1$s</string>
+    <string name="character_status">Статус персонажа - $1$s</string>
+
+<!-- descriptions -->
+    <string name="icon_search">Иконка поиска</string>
+    <string name="button_filter">Кнопка фильтра</string>
+    <string name="sad_morty">Грустный Морти из за ошибки: $1$s</string>
+
+
 </resources>

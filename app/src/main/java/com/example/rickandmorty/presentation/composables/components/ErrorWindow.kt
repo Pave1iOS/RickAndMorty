@@ -29,7 +29,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rickandmorty.R
-import com.example.rickandmorty.utils.ContentDescriptions
 
 @Composable
 fun ErrorWindow(
@@ -63,7 +62,7 @@ fun ErrorWindow(
                     modifier = Modifier
                         .size(boxWidth * 0.4f, boxHeight * 0.4f),
                     painter = painterResource(R.drawable.sad_morty),
-                    contentDescription = ContentDescriptions.SAD_MORTY,
+                    contentDescription = stringResource(R.string.sad_morty, text),
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))

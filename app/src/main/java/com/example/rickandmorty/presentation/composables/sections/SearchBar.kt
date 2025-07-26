@@ -20,7 +20,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rickandmorty.R
-import com.example.rickandmorty.utils.ContentDescriptions
 
 @Composable
 fun SearchBar(
@@ -41,7 +40,7 @@ fun SearchBar(
         trailingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
-                contentDescription = ContentDescriptions.SEARCH
+                contentDescription = stringResource(R.string.icon_search)
             )
         },
         singleLine = true,

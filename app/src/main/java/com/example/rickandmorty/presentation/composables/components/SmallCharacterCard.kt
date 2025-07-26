@@ -24,13 +24,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.rickandmorty.R
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
-import com.example.rickandmorty.utils.ContentDescriptions
 
 @Composable
 fun SmallCharacterCard(
@@ -56,7 +56,7 @@ fun SmallCharacterCard(
                     .background(Color.Yellow)
                     .clip(RoundedCornerShape(8.dp)),
                 model = rickAndMortyCharacter.image,
-                contentDescription = ContentDescriptions.imageDescription(rickAndMortyCharacter.name),
+                contentDescription = stringResource(R.string.character_image, rickAndMortyCharacter.name),
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(R.drawable.placeholder)
             )
@@ -75,7 +75,7 @@ fun SmallCharacterCard(
                     modifier = Modifier
                         .size(8.dp),
                     painter = painterResource(R.drawable.green_circle),
-                    contentDescription = ContentDescriptions.statusDescription(rickAndMortyCharacter.status)
+                    contentDescription = stringResource(R.string.character_status, rickAndMortyCharacter.status)
                 )
 
                 Text(
