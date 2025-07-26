@@ -39,7 +39,7 @@ fun SearchBar(
         trailingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
-                contentDescription = ContentDescriptions.search
+                contentDescription = ContentDescriptions.SEARCH
             )
         },
         singleLine = true,

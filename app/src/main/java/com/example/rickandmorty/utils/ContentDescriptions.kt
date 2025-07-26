@@ -2,8 +2,9 @@ package com.example.rickandmorty.utils
 
 object ContentDescriptions {
 
-    const val search = "Иконка поиска"
-    const val filter = "Кнопка фильтра"
+    const val SEARCH = "Иконка поиска"
+    const val FILTER = "Кнопка фильтра"
+    const val SAD_MORTY = "Грустный Морти"
 
     fun imageDescription(name: String): String {
         return "Изображение персонажа $name"

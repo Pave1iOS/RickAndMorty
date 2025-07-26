@@ -37,7 +37,7 @@ fun ButtonFilter(
                 .size(20.dp),
             tint = Color.Unspecified,
             painter = painterResource(R.drawable.button_filter),
-            contentDescription = ContentDescriptions.filter
+            contentDescription = ContentDescriptions.FILTER
         )
     }
 }
