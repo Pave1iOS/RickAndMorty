@@ -9,6 +9,7 @@
     <string name="unknown_error">Неизвестная ошибка</string>
     <string name="character_image">Изображение персонажа - $1$s</string>
     <string name="character_status">Статус персонажа - $1$s</string>
+    <string name="refresh_content">Обновление страницы</string>
 
 <!-- descriptions -->
     <string name="icon_search">Иконка поиска</string>
