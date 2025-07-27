@@ -20,6 +20,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.presentation.composables.components.ButtonFilter
+import com.example.rickandmorty.presentation.composables.components.LoadIndicator
 import com.example.rickandmorty.presentation.composables.components.RefreshIcon
 import com.example.rickandmorty.presentation.composables.sections.CharactersGridScreen
 import com.example.rickandmorty.presentation.composables.sections.SearchBar
@@ -36,6 +37,8 @@ fun MainScreenContent(
 
     val coroutineScope = rememberCoroutineScope()
     val gridState = rememberLazyGridState()
+    val isFirsLoad = rickAndMortyCharacters.loadState.refresh is LoadState.Loading
+            && rickAndMortyCharacters.itemCount == 0
 
     Column(
         modifier = Modifier
@@ -49,36 +52,45 @@ fun MainScreenContent(
             onQueryChange = {}
         )
 
-        SwipeRefresh(
-            state = rememberSwipeRefreshState(
-                rickAndMortyCharacters.loadState.refresh is LoadState.Loading
-            ),
-            onRefresh = {
-                coroutineScope.launch {
-                    rickAndMortyCharacters.refresh()
-                }
-            },
-            indicator = { state, _ ->
-                // Центрируем кастомный индикатор
-                Box(
-                    modifier = Modifier
-                        .size(80.dp)
-                        .padding(top = 12.dp),
-                    contentAlignment = Alignment.TopCenter
-                ) {
-                    RefreshIcon(
-                        isRefreshing = state.isRefreshing
-                    )
-                }
+        if (isFirsLoad) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                LoadIndicator()
             }
-        ) {
-            CharactersGridScreen(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 5.dp),
-                rickAndMortyCharacters = rickAndMortyCharacters,
-                gridState = gridState
-            )
+        } else {
+            SwipeRefresh(
+                state = rememberSwipeRefreshState(
+                    rickAndMortyCharacters.loadState.refresh is LoadState.Loading
+                ),
+                onRefresh = {
+                    coroutineScope.launch {
+                        rickAndMortyCharacters.refresh()
+                    }
+                },
+                indicator = { state, _ ->
+                    // Центрируем кастомный индикатор
+                    Box(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .padding(top = 12.dp),
+                        contentAlignment = Alignment.TopCenter
+                    ) {
+                        RefreshIcon(
+                            isRefreshing = state.isRefreshing
+                        )
+                    }
+                }
+            ) {
+                CharactersGridScreen(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 5.dp),
+                    rickAndMortyCharacters = rickAndMortyCharacters,
+                    gridState = gridState
+                )
+            }
         }
     }
 
