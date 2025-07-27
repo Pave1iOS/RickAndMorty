@@ -5,19 +5,23 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.rickandmorty.App
 import com.example.rickandmorty.R
+import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.presentation.composables.MainScreenContent
 import com.example.rickandmorty.presentation.composables.components.ErrorWindow
 import com.example.rickandmorty.presentation.composables.components.LoadIndicator
 import com.example.rickandmorty.theme.RickAndMortyTheme
+import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
 import javax.inject.Inject
 
 class MainScreen : ComponentActivity() {
@@ -40,7 +44,6 @@ class MainScreen : ComponentActivity() {
 
             val characters = viewModel.charactersPagingFlow.collectAsLazyPagingItems()
 
-            val isLoading = characters.loadState.refresh is LoadState.Loading
             val isAppending = characters.loadState.append is LoadState.Loading
             val isError = characters.loadState.refresh is LoadState.Error
 
@@ -50,12 +53,6 @@ class MainScreen : ComponentActivity() {
                         .fillMaxSize()
                 ) {
                     when {
-                        isLoading -> {
-                            LoadIndicator(
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                            )
-                        }
 
                         isError -> {
 
@@ -81,6 +78,27 @@ class MainScreen : ComponentActivity() {
         }
     }
 }
+
+ @Preview
+ @Composable
+ fun MainScreenPreview() {
+
+     val fakeList = List(6) {
+         RickAndMortyCharacter(
+             name = "Character $it",
+             status = "Alive",
+             species = "Human",
+             gender = "Male",
+             image = ""
+         )
+     }
+
+     val pagingItems = rememberFakeLazyPagingItems(fakeList)
+
+     RickAndMortyTheme {
+         MainScreenContent(rickAndMortyCharacters = pagingItems)
+     }
+ }
 
 
 

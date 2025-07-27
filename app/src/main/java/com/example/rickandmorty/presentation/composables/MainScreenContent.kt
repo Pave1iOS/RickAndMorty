@@ -11,11 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,20 +25,17 @@ import com.example.rickandmorty.presentation.composables.sections.CharactersGrid
 import com.example.rickandmorty.presentation.composables.sections.SearchBar
 import com.example.rickandmorty.theme.RickAndMortyTheme
 import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
-
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreenContent(
     rickAndMortyCharacters: LazyPagingItems<RickAndMortyCharacter>
 ) {
-    var isRefreshing by remember { mutableStateOf(false) }
+
     val coroutineScope = rememberCoroutineScope()
     val gridState = rememberLazyGridState()
-    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing)
 
     Column(
         modifier = Modifier
@@ -57,15 +50,12 @@ fun MainScreenContent(
         )
 
         SwipeRefresh(
-            state = swipeRefreshState,
+            state = rememberSwipeRefreshState(
+                rickAndMortyCharacters.loadState.refresh is LoadState.Loading
+            ),
             onRefresh = {
-                isRefreshing = true
                 coroutineScope.launch {
                     rickAndMortyCharacters.refresh()
-                    while (rickAndMortyCharacters.loadState.refresh is LoadState.Loading) {
-                        delay(100)
-                    }
-                    isRefreshing = false
                 }
             },
             indicator = { state, _ ->
