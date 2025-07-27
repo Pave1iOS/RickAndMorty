@@ -29,12 +29,12 @@ fun CharactersGridScreen(
     gridState: LazyGridState = LazyGridState()
 ) {
     LazyVerticalGrid(
+        modifier = modifier
+            .fillMaxSize(),
         state = gridState,
-        modifier = modifier.fillMaxSize(),
         columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         items(rickAndMortyCharacters.itemCount) {
             val character = rickAndMortyCharacters[it]

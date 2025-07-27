@@ -32,8 +32,7 @@ fun SearchBar(
         onValueChange = onQueryChange,
         modifier = modifier
             .fillMaxWidth()
-            .height(60.dp)
-            .padding(start = 10.dp, end = 10.dp),
+            .height(60.dp),
         placeholder = {
             Text(text = stringResource(R.string.search_placeholder))
         },

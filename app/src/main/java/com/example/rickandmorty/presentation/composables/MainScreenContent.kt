@@ -2,6 +2,7 @@ package com.example.rickandmorty.presentation.composables
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,18 +44,24 @@ fun MainScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(10.dp)
     ) {
         SearchBar(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 5.dp),
+                .fillMaxWidth(),
             query = "",
             onQueryChange = {}
         )
 
+        Spacer(modifier =
+            Modifier
+                .size(10.dp)
+        )
+
         if (isFirsLoad) {
             Box(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 LoadIndicator()
@@ -70,7 +77,6 @@ fun MainScreenContent(
                     }
                 },
                 indicator = { state, _ ->
-                    // Центрируем кастомный индикатор
                     Box(
                         modifier = Modifier
                             .size(80.dp)
@@ -85,8 +91,7 @@ fun MainScreenContent(
             ) {
                 CharactersGridScreen(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 5.dp),
+                        .fillMaxWidth(),
                     rickAndMortyCharacters = rickAndMortyCharacters,
                     gridState = gridState
                 )
@@ -95,7 +100,8 @@ fun MainScreenContent(
     }
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
     ) {
         ButtonFilter(
             modifier = Modifier
