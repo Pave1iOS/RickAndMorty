@@ -21,7 +21,7 @@ import androidx.paging.compose.LazyPagingItems
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.presentation.composables.components.ButtonFilter
 import com.example.rickandmorty.presentation.composables.components.LoadIndicator
-import com.example.rickandmorty.presentation.composables.components.RefreshIcon
+import com.example.rickandmorty.presentation.composables.components.RefreshIndicator
 import com.example.rickandmorty.presentation.composables.sections.CharactersGridScreen
 import com.example.rickandmorty.presentation.composables.sections.SearchBar
 import com.example.rickandmorty.theme.RickAndMortyTheme
@@ -77,7 +77,7 @@ fun MainScreenContent(
                             .padding(top = 12.dp),
                         contentAlignment = Alignment.TopCenter
                     ) {
-                        RefreshIcon(
+                        RefreshIndicator(
                             isRefreshing = state.isRefreshing
                         )
                     }
