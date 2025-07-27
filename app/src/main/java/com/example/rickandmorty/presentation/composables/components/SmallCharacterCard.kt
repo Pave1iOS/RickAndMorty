@@ -1,17 +1,13 @@
 package com.example.rickandmorty.presentation.composables.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
@@ -61,29 +57,11 @@ fun SmallCharacterCard(
                 placeholder = painterResource(R.drawable.placeholder)
             )
 
-            Row(
+            StatusComponent(
                 modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .clip(RoundedCornerShape(topStart = 12.dp))
-                    .background(colorResource(R.color.black))
-                    .padding(horizontal = 6.dp, vertical = 4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-
-                Image(
-                    modifier = Modifier
-                        .size(8.dp),
-                    painter = painterResource(R.drawable.green_circle),
-                    contentDescription = stringResource(R.string.character_status, rickAndMortyCharacter.status)
-                )
-
-                Text(
-                    text = rickAndMortyCharacter.status,
-                    color = Color.White,
-                    style = MaterialTheme.typography.labelSmall
-                )
-            }
+                    .align(Alignment.BottomEnd),
+                character = rickAndMortyCharacter
+            )
         }
 
         Box(

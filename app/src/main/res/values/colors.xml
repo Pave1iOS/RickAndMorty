@@ -13,4 +13,9 @@
     <color name="text_name">#FFFFFF</color>
     <color name="text_secondary">#8C8686</color>
     <color name="error_message">#A42222</color>
+
+<!--status_light_circle-->
+    <color name="green_circle">#65BF21</color>
+    <color name="yellow_circle">#D5C61B</color>
+    <color name="red_circle">#BD1E1E</color>
 </resources>
