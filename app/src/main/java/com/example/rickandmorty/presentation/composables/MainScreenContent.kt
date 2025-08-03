@@ -26,7 +26,7 @@ import com.example.rickandmorty.presentation.composables.components.RefreshIndic
 import com.example.rickandmorty.presentation.composables.sections.CharactersGridScreen
 import com.example.rickandmorty.presentation.composables.sections.SearchBar
 import com.example.rickandmorty.theme.RickAndMortyTheme
-import com.example.rickandmorty.utils.CharacterStatus
+import com.example.rickandmorty.data.api.params.CharacterStatus
 import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState

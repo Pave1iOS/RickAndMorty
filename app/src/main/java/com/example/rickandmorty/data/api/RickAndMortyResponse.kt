@@ -1,6 +1,6 @@
 package com.example.rickandmorty.data.api
 
-import com.example.rickandmorty.utils.CharacterStatus
+import com.example.rickandmorty.data.api.params.CharacterStatus
 import com.google.gson.annotations.SerializedName
 
 data class CharacterResponse(

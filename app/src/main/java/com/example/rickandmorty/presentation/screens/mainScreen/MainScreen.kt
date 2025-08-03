@@ -21,7 +21,7 @@ import com.example.rickandmorty.presentation.composables.MainScreenContent
 import com.example.rickandmorty.presentation.composables.components.ErrorWindow
 import com.example.rickandmorty.presentation.composables.components.LoadIndicator
 import com.example.rickandmorty.theme.RickAndMortyTheme
-import com.example.rickandmorty.utils.CharacterStatus
+import com.example.rickandmorty.data.api.params.CharacterStatus
 import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
 import javax.inject.Inject
 

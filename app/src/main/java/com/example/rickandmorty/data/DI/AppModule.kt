@@ -1,10 +1,8 @@
 package com.example.rickandmorty.data.DI
 
-import android.util.Log
 import com.example.rickandmorty.data.api.RickAndMortyAPI
-import com.example.rickandmorty.domain.NetworkRepository
-import com.example.rickandmorty.utils.CharacterStatus
-import com.example.rickandmorty.utils.StatusAdapter
+import com.example.rickandmorty.data.api.params.CharacterStatus
+import com.example.rickandmorty.data.api.params.StatusAdapter
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides

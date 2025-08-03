@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.rickandmorty.R
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
-import com.example.rickandmorty.utils.CharacterStatus
+import com.example.rickandmorty.data.api.params.CharacterStatus
 
 @Composable
 fun SmallCharacterCard(

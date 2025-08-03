@@ -1,4 +1,4 @@
-package com.example.rickandmorty.utils
+package com.example.rickandmorty.data.api.params
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
