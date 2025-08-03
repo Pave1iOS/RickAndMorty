@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.rickandmorty.R
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
+import com.example.rickandmorty.data.api.params.CharacterGender
 import com.example.rickandmorty.data.api.params.CharacterStatus
 
 @Composable
@@ -89,7 +90,7 @@ fun SmallCharacterCard(
 
                 Text(
                     textAlign = TextAlign.Center,
-                    text = "${rickAndMortyCharacter.gender} | ${rickAndMortyCharacter.species}",
+                    text = "${rickAndMortyCharacter.gender.displayName} | ${rickAndMortyCharacter.species}",
                     style = MaterialTheme.typography.bodySmall,
                     color = colorResource(R.color.text_secondary)
                 )
@@ -109,7 +110,7 @@ fun SmallCharacterCardPreview() {
         "Name",
         "Species",
         CharacterStatus.UNKNOWN,
-        "gender",
+        CharacterGender.FEMALE,
         "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
     )
 

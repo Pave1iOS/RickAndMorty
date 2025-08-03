@@ -1,15 +1,20 @@
 package com.example.rickandmorty.data.api.params
 
-enum class CharacterGender(val value: String) {
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-    FEMALE("female"),
-    MALE("male"),
-    GENDERLESS("genderless"),
-    UNKNOWN("unknown");
+@Serializable
+enum class CharacterGender(val displayName: String) {
 
-    companion object {
-        fun from(value: String): CharacterGender {
-            return entries.find { it.value == value } ?: UNKNOWN
-        }
-    }
+    @SerialName("Female")
+    FEMALE("Female"),
+
+    @SerialName("Male")
+    MALE("Male"),
+
+    @SerialName("Genderless")
+    GENDERLESS("Genderless"),
+
+    @SerialName("unknown")
+    UNKNOWN("unknown")
 }

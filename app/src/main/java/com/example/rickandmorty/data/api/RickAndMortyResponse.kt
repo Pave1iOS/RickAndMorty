@@ -1,5 +1,6 @@
 package com.example.rickandmorty.data.api
 
+import com.example.rickandmorty.data.api.params.CharacterGender
 import com.example.rickandmorty.data.api.params.CharacterStatus
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -34,7 +35,7 @@ data class RickAndMortyCharacter(
     @SerialName("status")
     val status: CharacterStatus,
     @SerialName("gender")
-    val gender: String,
+    val gender: CharacterGender,
     @SerialName("image")
     val image: String
 )

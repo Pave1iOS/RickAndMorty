@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
+import com.example.rickandmorty.data.api.params.CharacterGender
 import com.example.rickandmorty.presentation.composables.components.ButtonFilter
 import com.example.rickandmorty.presentation.composables.components.LoadIndicator
 import com.example.rickandmorty.presentation.composables.components.RefreshIndicator
@@ -125,7 +126,7 @@ fun MainScreenContentPreview() {
             name = "Name $it",
             species = "Human",
             status = CharacterStatus.ALIVE,
-            gender = "Male",
+            gender = CharacterGender.MALE,
             image = "https://rickandmortyapi.com/api/character/avatar/${it + 1}.jpeg"
         )
     }

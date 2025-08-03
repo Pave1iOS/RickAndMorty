@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
+import com.example.rickandmorty.data.api.params.CharacterGender
 import com.example.rickandmorty.presentation.composables.components.SmallCharacterCard
 import com.example.rickandmorty.data.api.params.CharacterStatus
 import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
@@ -48,7 +49,7 @@ fun CharactersGridScreenPreview() {
         name = "Name",
         species = "Species",
         status = CharacterStatus.ALIVE,
-        gender = "Gender",
+        gender = CharacterGender.MALE,
         image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
     )
 

@@ -17,6 +17,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.rickandmorty.App
 import com.example.rickandmorty.R
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
+import com.example.rickandmorty.data.api.params.CharacterGender
 import com.example.rickandmorty.presentation.composables.MainScreenContent
 import com.example.rickandmorty.presentation.composables.components.ErrorWindow
 import com.example.rickandmorty.presentation.composables.components.LoadIndicator
@@ -94,7 +95,7 @@ class MainScreen : ComponentActivity() {
              name = "Character $it",
              status = CharacterStatus.ALIVE,
              species = "Human",
-             gender = "Male",
+             gender = CharacterGender.UNKNOWN,
              image = ""
          )
      }

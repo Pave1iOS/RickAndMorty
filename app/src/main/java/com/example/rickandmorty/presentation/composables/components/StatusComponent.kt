@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rickandmorty.R
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
+import com.example.rickandmorty.data.api.params.CharacterGender
 import com.example.rickandmorty.data.api.params.CharacterStatus
 
 @Composable
@@ -70,21 +71,21 @@ fun StatusComponentPreview() {
             name = "1",
             status = CharacterStatus.DEAD,
             species = "Human",
-            gender = "Male",
+            gender = CharacterGender.MALE,
             image = ""
         ),
         RickAndMortyCharacter(
             name = "2",
             status = CharacterStatus.ALIVE,
             species = "Human",
-            gender = "Male",
+            gender = CharacterGender.FEMALE,
             image = ""
         ),
         RickAndMortyCharacter(
             name = "3",
             status = CharacterStatus.UNKNOWN,
             species = "Human",
-            gender = "Male",
+            gender = CharacterGender.UNKNOWN,
             image = ""
         )
 
