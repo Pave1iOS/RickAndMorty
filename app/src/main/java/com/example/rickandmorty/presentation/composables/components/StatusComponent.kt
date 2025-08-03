@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rickandmorty.R
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
+import com.example.rickandmorty.utils.CharacterStatus
 
 @Composable
 fun StatusComponent(
@@ -43,12 +44,7 @@ fun StatusComponent(
         horizontalArrangement = Arrangement.spacedBy(6.dp)
     ) {
 
-        val statusIcon = when (character.status.lowercase()) {
-            "alive" -> colorResource(R.color.green_circle)
-            "dead" -> colorResource(R.color.red_circle)
-            "unknown" -> colorResource(R.color.yellow_circle)
-            else -> colorResource(R.color.secondary)
-        }
+        val statusIcon = colorResource(id = character.status.colorResID)
 
         Image(
             modifier = Modifier
@@ -61,7 +57,7 @@ fun StatusComponent(
         )
 
         Text(
-            text = character.status,
+            text = character.status.value,
             color = Color.White,
             style = MaterialTheme.typography.labelSmall
         )
@@ -74,21 +70,21 @@ fun StatusComponentPreview() {
     val characters = listOf(
         RickAndMortyCharacter(
             name = "1",
-            status = "Alive",
+            status = CharacterStatus.DEAD,
             species = "Human",
             gender = "Male",
             image = ""
         ),
         RickAndMortyCharacter(
             name = "2",
-            status = "Dead",
+            status = CharacterStatus.ALIVE,
             species = "Human",
             gender = "Male",
             image = ""
         ),
         RickAndMortyCharacter(
             name = "3",
-            status = "unknown",
+            status = CharacterStatus.UNKNOWN,
             species = "Human",
             gender = "Male",
             image = ""

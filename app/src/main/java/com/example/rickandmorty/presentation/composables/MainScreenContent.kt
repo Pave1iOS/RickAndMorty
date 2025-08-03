@@ -26,6 +26,7 @@ import com.example.rickandmorty.presentation.composables.components.RefreshIndic
 import com.example.rickandmorty.presentation.composables.sections.CharactersGridScreen
 import com.example.rickandmorty.presentation.composables.sections.SearchBar
 import com.example.rickandmorty.theme.RickAndMortyTheme
+import com.example.rickandmorty.utils.CharacterStatus
 import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -33,7 +34,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreenContent(
-    rickAndMortyCharacters: LazyPagingItems<RickAndMortyCharacter>
+    rickAndMortyCharacters: LazyPagingItems<RickAndMortyCharacter>,
+    buttonFilterOnClick: () -> Unit = {}
 ) {
 
     val coroutineScope = rememberCoroutineScope()
@@ -106,7 +108,8 @@ fun MainScreenContent(
         ButtonFilter(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(end = 25.dp, bottom = 25.dp)
+                .padding(end = 25.dp, bottom = 25.dp),
+            onClick = buttonFilterOnClick
         )
     }
 }
@@ -121,7 +124,7 @@ fun MainScreenContentPreview() {
         RickAndMortyCharacter(
             name = "Name $it",
             species = "Human",
-            status = "Alive",
+            status = CharacterStatus.ALIVE,
             gender = "Male",
             image = "https://rickandmortyapi.com/api/character/avatar/${it + 1}.jpeg"
         )

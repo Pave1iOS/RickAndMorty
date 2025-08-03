@@ -21,6 +21,7 @@ import com.example.rickandmorty.presentation.composables.MainScreenContent
 import com.example.rickandmorty.presentation.composables.components.ErrorWindow
 import com.example.rickandmorty.presentation.composables.components.LoadIndicator
 import com.example.rickandmorty.theme.RickAndMortyTheme
+import com.example.rickandmorty.utils.CharacterStatus
 import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
 import javax.inject.Inject
 
@@ -63,7 +64,12 @@ class MainScreen : ComponentActivity() {
                         }
 
                         else -> {
-                            MainScreenContent(characters)
+                            MainScreenContent(
+                                rickAndMortyCharacters = characters,
+                                buttonFilterOnClick = {
+
+                                }
+                            )
                         }
                     }
 
@@ -86,7 +92,7 @@ class MainScreen : ComponentActivity() {
      val fakeList = List(6) {
          RickAndMortyCharacter(
              name = "Character $it",
-             status = "Alive",
+             status = CharacterStatus.ALIVE,
              species = "Human",
              gender = "Male",
              image = ""

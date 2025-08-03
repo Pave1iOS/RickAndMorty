@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.rickandmorty.R
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
+import com.example.rickandmorty.utils.CharacterStatus
 
 @Composable
 fun SmallCharacterCard(
@@ -107,7 +108,7 @@ fun SmallCharacterCardPreview() {
     val fakeRickAndMortyCharacter = RickAndMortyCharacter(
         "Name",
         "Species",
-        "status",
+        CharacterStatus.UNKNOWN,
         "gender",
         "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
     )

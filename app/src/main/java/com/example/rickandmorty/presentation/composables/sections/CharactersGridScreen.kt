@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.presentation.composables.components.SmallCharacterCard
+import com.example.rickandmorty.utils.CharacterStatus
 import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
 
 @Composable
@@ -52,7 +53,7 @@ fun CharactersGridScreenPreview() {
     val fakeRickAndMortyCharacter = RickAndMortyCharacter(
         name = "Name",
         species = "Species",
-        status = "Status",
+        status = CharacterStatus.ALIVE,
         gender = "Gender",
         image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
     )

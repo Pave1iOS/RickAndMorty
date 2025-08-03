@@ -1,5 +1,6 @@
 package com.example.rickandmorty.data.api
 
+import com.example.rickandmorty.utils.CharacterStatus
 import com.google.gson.annotations.SerializedName
 
 data class CharacterResponse(
@@ -28,7 +29,7 @@ data class RickAndMortyCharacter(
     @SerializedName("species")
     val species: String,
     @SerializedName("status")
-    val status: String,
+    val status: CharacterStatus,
     @SerializedName("gender")
     val gender: String,
     @SerializedName("image")
