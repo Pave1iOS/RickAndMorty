@@ -1,15 +1,18 @@
 package com.example.rickandmorty.data.api.params
 
 import com.example.rickandmorty.R
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-enum class CharacterStatus(val value: String, val colorResID: Int) {
-    ALIVE("alive", R.color.green_circle),
-    DEAD("dead", R.color.red_circle),
-    UNKNOWN("unknown", R.color.yellow_circle);
+@Serializable
+enum class CharacterStatus(val colorResID: Int) {
 
-    companion object {
-        fun from(value: String): CharacterStatus {
-            return entries.find { it.value.equals(value, ignoreCase = true) } ?: UNKNOWN
-        }
-    }
+    @SerialName("Alive")
+    ALIVE(R.color.green_circle),
+
+    @SerialName("Dead")
+    DEAD(R.color.red_circle),
+
+    @SerialName("unknown")
+    UNKNOWN(R.color.yellow_circle)
 }

@@ -55,7 +55,7 @@ fun StatusComponent(
         )
 
         Text(
-            text = character.status.value,
+            text = character.status.name.lowercase(),
             color = Color.White,
             style = MaterialTheme.typography.labelSmall
         )

@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 
     kotlin("kapt")
 }
@@ -68,9 +69,9 @@ dependencies {
     implementation("com.google.dagger:dagger:2.51.1")
     kapt("com.google.dagger:dagger-compiler:2.51.1")
 
-    // Json converter
-    implementation("com.google.code.gson:gson:2.11.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    // KotlinSerialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
 
     // Network
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

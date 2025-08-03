@@ -1,37 +1,40 @@
 package com.example.rickandmorty.data.api
 
 import com.example.rickandmorty.data.api.params.CharacterStatus
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class CharacterResponse(
-    @SerializedName("info")
+    @SerialName("info")
     val info: Info,
 
-    @SerializedName("results")
+    @SerialName("results")
     val results: List<RickAndMortyCharacter>
 )
 
+@Serializable
 data class Info(
-    @SerializedName("count")
+    @SerialName("count")
     val count: Int,
-    @SerializedName("pages")
+    @SerialName("pages")
     val pages: Int,
-    @SerializedName("next")
-    val next: String?,
-    @SerializedName("prev")
-    val prev: String?
+    @SerialName("next")
+    val next: String? = null,
+    @SerialName("prev")
+    val prev: String? = null
 )
 
+@Serializable
 data class RickAndMortyCharacter(
-
-    @SerializedName("name")
+    @SerialName("name")
     val name: String,
-    @SerializedName("species")
+    @SerialName("species")
     val species: String,
-    @SerializedName("status")
+    @SerialName("status")
     val status: CharacterStatus,
-    @SerializedName("gender")
+    @SerialName("gender")
     val gender: String,
-    @SerializedName("image")
+    @SerialName("image")
     val image: String
 )
