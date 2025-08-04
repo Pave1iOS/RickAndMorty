@@ -40,11 +40,11 @@ import com.example.rickandmorty.data.api.params.CharacterStatus
 
 @Composable
 fun CharacterFilterScreen(
-    onApplyFilter: (status: String?, gender: String?) -> Unit,
+    onApplyFilter: (status: CharacterStatus?, gender: CharacterGender?) -> Unit,
     onDismiss: () -> Unit
 ) {
-    var selectedStatus by remember { mutableStateOf<String?>(null) }
-    var selectedGender by remember { mutableStateOf<String?>(null) }
+    var selectedStatus by remember { mutableStateOf<CharacterStatus?>(null) }
+    var selectedGender by remember { mutableStateOf<CharacterGender?>(null) }
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize(),
@@ -73,8 +73,8 @@ fun CharacterFilterScreen(
                     ) {
                         CharacterStatus.entries.forEach { status ->
                             FilterChip(
-                                selected = selectedStatus == status.displayName,
-                                onClick = { selectedStatus = status.displayName },
+                                selected = selectedStatus == status,
+                                onClick = { selectedStatus = status },
                                 label = { Text(status.displayName) }
                             )
                         }
@@ -95,8 +95,8 @@ fun CharacterFilterScreen(
                     ) {
                         CharacterGender.entries.forEach { gender ->
                             FilterChip(
-                                selected = selectedGender == gender.displayName,
-                                onClick = { selectedGender = gender.displayName },
+                                selected = selectedGender == gender,
+                                onClick = { selectedGender = gender },
                                 label = { Text(gender.displayName) }
                             )
                         }
@@ -111,7 +111,6 @@ fun CharacterFilterScreen(
                         .padding(12.dp)
                         .clickable {
                             onApplyFilter(selectedStatus, selectedGender)
-                            onDismiss()
                         }
                 ) {
                     Text(

@@ -12,7 +12,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,6 +32,7 @@ import com.example.rickandmorty.presentation.composables.sections.CharactersGrid
 import com.example.rickandmorty.presentation.composables.sections.SearchBar
 import com.example.rickandmorty.theme.RickAndMortyTheme
 import com.example.rickandmorty.data.api.params.CharacterStatus
+import com.example.rickandmorty.presentation.composables.sections.CharacterFilterScreen
 import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -36,9 +41,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainScreenContent(
     rickAndMortyCharacters: LazyPagingItems<RickAndMortyCharacter>,
-    buttonFilterOnClick: () -> Unit = {}
+    onApplyFilter: (CharacterStatus?, CharacterGender?) -> Unit,
+    onDismissFilter: () -> Unit
 ) {
 
+    var showFilter by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val gridState = rememberLazyGridState()
     val isFirsLoad = rickAndMortyCharacters.loadState.refresh is LoadState.Loading
@@ -110,9 +117,23 @@ fun MainScreenContent(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(end = 25.dp, bottom = 25.dp),
-            onClick = buttonFilterOnClick
+            onClick = { showFilter = true }
         )
     }
+
+    if (showFilter) {
+        CharacterFilterScreen(
+            onApplyFilter = { status, gender ->
+                onApplyFilter(status, gender)
+                showFilter = false
+            },
+            onDismiss = {
+                onDismissFilter()
+                showFilter = false
+            }
+        )
+    }
+
 }
 
 
@@ -143,7 +164,11 @@ fun MainScreenContentPreview() {
                 .padding(topInset),
             contentAlignment = Alignment.Center
         ) {
-            MainScreenContent(rickAndMortyCharacters = pagingItems)
+            MainScreenContent(
+                rickAndMortyCharacters = pagingItems,
+                onApplyFilter = { _, _ -> },
+                onDismissFilter = {}
+            )
         }
     }
 

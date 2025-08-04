@@ -5,13 +5,18 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.data.api.RickAndMortyAPI
+import com.example.rickandmorty.data.api.params.CharacterGender
+import com.example.rickandmorty.data.api.params.CharacterStatus
 import com.example.rickandmorty.utils.LogSource
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CharacterPagingSource @Inject constructor(private val api: RickAndMortyAPI)
-    : PagingSource<Int, RickAndMortyCharacter>() {
+class CharacterPagingSource @Inject constructor(
+    private val api: RickAndMortyAPI,
+    private val status: String? = null,
+    private val gender: String? = null
+) : PagingSource<Int, RickAndMortyCharacter>() {
 
     override fun getRefreshKey(state: PagingState<Int, RickAndMortyCharacter>): Int? {
         return state.anchorPosition?.let {
@@ -25,7 +30,7 @@ class CharacterPagingSource @Inject constructor(private val api: RickAndMortyAPI
         Log.i(TAG, "${LogSource.NETWORK} page: $page")
 
         return try {
-            val response = api.getCharacters(page)
+            val response = api.getCharacters(page, status = status, gender = gender)
             LoadResult.Page(
                 data = response.results,
                 prevKey = if (page == 1) null else page - 1,

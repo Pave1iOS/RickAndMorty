@@ -6,6 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,6 +25,7 @@ import com.example.rickandmorty.presentation.composables.components.ErrorWindow
 import com.example.rickandmorty.presentation.composables.components.LoadIndicator
 import com.example.rickandmorty.theme.RickAndMortyTheme
 import com.example.rickandmorty.data.api.params.CharacterStatus
+import com.example.rickandmorty.presentation.composables.sections.CharacterFilterScreen
 import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
 import javax.inject.Inject
 
@@ -44,10 +47,18 @@ class MainScreen : ComponentActivity() {
 
         setContent {
 
-            val characters = viewModel.charactersPagingFlow.collectAsLazyPagingItems()
+            val isFiltered by viewModel.isFiltered.collectAsState()
+
+            val characters = if (isFiltered) {
+                viewModel.filteredCharacters.collectAsLazyPagingItems()
+            } else {
+                viewModel.charactersPagingFlow.collectAsLazyPagingItems()
+            }
 
             val isAppending = characters.loadState.append is LoadState.Loading
             val isError = characters.loadState.refresh is LoadState.Error
+
+
 
             RickAndMortyTheme {
                 Box(
@@ -67,8 +78,11 @@ class MainScreen : ComponentActivity() {
                         else -> {
                             MainScreenContent(
                                 rickAndMortyCharacters = characters,
-                                buttonFilterOnClick = {
-                                    
+                                onApplyFilter = { status, gender ->
+                                    viewModel.filterCharacters(status, gender)
+                                },
+                                onDismissFilter = {
+                                    viewModel.clearFilter()
                                 }
                             )
                         }
@@ -103,7 +117,11 @@ class MainScreen : ComponentActivity() {
      val pagingItems = rememberFakeLazyPagingItems(fakeList)
 
      RickAndMortyTheme {
-         MainScreenContent(rickAndMortyCharacters = pagingItems)
+         MainScreenContent(
+             rickAndMortyCharacters = pagingItems,
+             onApplyFilter = { _, _ -> },
+             onDismissFilter = {}
+         )
      }
  }
 
