@@ -45,7 +45,7 @@ class MainScreenViewModel @Inject constructor(
                 .cachedIn(viewModelScope)
                 .collect {
                     _filteredCharacters.value = it
-                    Log.i(TAG, "${LogSource.NETWORK} status: $status, gender: $gender")
+                    Log.i(TAG, "${LogSource.VIEWMODEL} status: $status, gender: $gender")
                 }
         }
     }
