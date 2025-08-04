@@ -79,10 +79,12 @@ class MainScreen : ComponentActivity() {
                             MainScreenContent(
                                 rickAndMortyCharacters = characters,
                                 onApplyFilter = { status, gender ->
-                                    viewModel.filterCharacters(status, gender)
-                                },
-                                onDismissFilter = {
-                                    viewModel.clearFilter()
+
+                                    if(status == null && gender == null) {
+                                        viewModel.clearFilter()
+                                    } else {
+                                        viewModel.filterCharacters(status, gender)
+                                    }
                                 }
                             )
                         }
@@ -119,8 +121,7 @@ class MainScreen : ComponentActivity() {
      RickAndMortyTheme {
          MainScreenContent(
              rickAndMortyCharacters = pagingItems,
-             onApplyFilter = { _, _ -> },
-             onDismissFilter = {}
+             onApplyFilter = { _, _ -> }
          )
      }
  }

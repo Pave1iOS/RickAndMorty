@@ -40,11 +40,18 @@ import com.example.rickandmorty.data.api.params.CharacterStatus
 
 @Composable
 fun CharacterFilterScreen(
-    onApplyFilter: (status: CharacterStatus?, gender: CharacterGender?) -> Unit,
-    onDismiss: () -> Unit
+    onApplyFilter: (status: CharacterStatus?, gender: CharacterGender?) -> Unit
 ) {
     var selectedStatus by remember { mutableStateOf<CharacterStatus?>(null) }
     var selectedGender by remember { mutableStateOf<CharacterGender?>(null) }
+
+    val filtersSelected = selectedStatus != null || selectedGender != null
+
+    val buttonColor = if (filtersSelected) {
+        colorResource(R.color.green_circle)
+    } else {
+        colorResource(R.color.red_circle)
+    }
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize(),
@@ -107,14 +114,17 @@ fun CharacterFilterScreen(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .clip(RoundedCornerShape(10.dp))
-                        .background(colorResource(R.color.secondary))
+                        .background(buttonColor)
                         .padding(12.dp)
                         .clickable {
-                            onApplyFilter(selectedStatus, selectedGender)
+                            if (filtersSelected) onApplyFilter(selectedStatus, selectedGender)
+                            else onApplyFilter(null, null)
                         }
                 ) {
                     Text(
-                        text = stringResource(R.string.apply_filter),
+                        text =
+                            if(filtersSelected) stringResource(R.string.apply_filter)
+                            else stringResource(R.string.close_filter),
                         color = colorResource(R.color.text_name)
                     )
                 }
@@ -134,8 +144,7 @@ fun CharacterFilterScreenPreview() {
         contentAlignment = Alignment.Center
     ) {
         CharacterFilterScreen(
-            onApplyFilter = { _, _ -> },
-            onDismiss = {}
+            onApplyFilter = { _, _ -> }
         )
     }
 }

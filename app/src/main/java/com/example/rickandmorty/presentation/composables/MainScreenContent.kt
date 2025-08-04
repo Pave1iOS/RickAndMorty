@@ -41,8 +41,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainScreenContent(
     rickAndMortyCharacters: LazyPagingItems<RickAndMortyCharacter>,
-    onApplyFilter: (CharacterStatus?, CharacterGender?) -> Unit,
-    onDismissFilter: () -> Unit
+    onApplyFilter: (CharacterStatus?, CharacterGender?) -> Unit
 ) {
 
     var showFilter by remember { mutableStateOf(false) }
@@ -126,10 +125,6 @@ fun MainScreenContent(
             onApplyFilter = { status, gender ->
                 onApplyFilter(status, gender)
                 showFilter = false
-            },
-            onDismiss = {
-                onDismissFilter()
-                showFilter = false
             }
         )
     }
@@ -166,8 +161,7 @@ fun MainScreenContentPreview() {
         ) {
             MainScreenContent(
                 rickAndMortyCharacters = pagingItems,
-                onApplyFilter = { _, _ -> },
-                onDismissFilter = {}
+                onApplyFilter = { _, _ -> }
             )
         }
     }
