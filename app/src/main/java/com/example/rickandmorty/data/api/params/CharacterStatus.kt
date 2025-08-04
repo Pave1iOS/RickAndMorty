@@ -5,14 +5,14 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class CharacterStatus(val colorResID: Int) {
+enum class CharacterStatus(val colorResID: Int, val displayName: String) {
 
     @SerialName("Alive")
-    ALIVE(R.color.green_circle),
+    ALIVE(R.color.green_circle, "Alive"),
 
     @SerialName("Dead")
-    DEAD(R.color.red_circle),
+    DEAD(R.color.red_circle, "Dead"),
 
     @SerialName("unknown")
-    UNKNOWN(R.color.yellow_circle)
+    UNKNOWN(R.color.yellow_circle, "Unknown")
 }

@@ -110,7 +110,7 @@ fun SmallCharacterCardPreview() {
         "Name",
         "Species",
         CharacterStatus.UNKNOWN,
-        CharacterGender.FEMALE,
+        CharacterGender.GENDERLESS,
         "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
     )
 

@@ -10,6 +10,7 @@
     <string name="character_image">Изображение персонажа - $1$s</string>
     <string name="character_status">Статус персонажа - $1$s</string>
     <string name="refresh_content">Обновление страницы</string>
+    <string name="apply_filter">Применить фильтр</string>
 
 <!-- descriptions -->
     <string name="icon_search">Иконка поиска</string>

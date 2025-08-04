@@ -68,7 +68,7 @@ class MainScreen : ComponentActivity() {
                             MainScreenContent(
                                 rickAndMortyCharacters = characters,
                                 buttonFilterOnClick = {
-
+                                    
                                 }
                             )
                         }
