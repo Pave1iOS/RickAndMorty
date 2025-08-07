@@ -1,6 +1,5 @@
 package com.example.rickandmorty.domain
 
-import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -34,17 +33,19 @@ class CharacterPagingSource @Inject constructor(
         val page = params.key ?: 1
         val networkStatus = getNetworkStatus()
 
-        Log.i(TAG, "${LogSource.NETWORK} page: $page")
+        logNetworkStatusOnce(networkStatus)
 
         return try {
 
             val characters = when(networkStatus) {
 
                 NetworkStatus.ONLINE -> {
-                    Log.i(TAG, "${LogSource.NETWORK} is online")
+                    Log.i(TAG, "${LogSource.NETWORK} page: $page")
 
                     val response = api.getCharacters(page, status = status, gender = gender)
                     val characters = response.results
+
+                    Log.i(TAG, "${LogSource.NETWORK} data: $characters")
 
                     val entities = characters.map {
                         RickAndMortyEntity(
@@ -64,9 +65,9 @@ class CharacterPagingSource @Inject constructor(
                 }
 
                 NetworkStatus.OFFLINE -> {
-                    Log.i(TAG, "${LogSource.NETWORK} is offline")
 
-                    val cached = database.rickAndMortyDao().getCachedCharacters(status = status, gender = gender)
+                    val cached = database.rickAndMortyDao().getCharacters(status = status, gender = gender)
+                    Log.i(TAG, "${LogSource.DATABASE} get: $cached")
 
                     cached.map {
                         RickAndMortyCharacter(
@@ -97,6 +98,14 @@ class CharacterPagingSource @Inject constructor(
 
     companion object {
         private const val TAG = "CharacterPagingSource"
+        private var logNetworkStatus: NetworkStatus? = null
+
+        fun logNetworkStatusOnce(currentStatus: NetworkStatus) {
+            if (logNetworkStatus != currentStatus) {
+                Log.i(TAG, "${LogSource.NETWORK} is ${currentStatus.name.lowercase()}")
+                logNetworkStatus = currentStatus
+            }
+        }
 
         enum class NetworkStatus {
             ONLINE,
