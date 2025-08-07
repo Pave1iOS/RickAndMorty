@@ -4,10 +4,9 @@ import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.data.api.RickAndMortyAPI
+import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.data.database.AppDatabase
-import com.example.rickandmorty.data.database.RickAndMortyEntity
 import com.example.rickandmorty.utils.LogSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

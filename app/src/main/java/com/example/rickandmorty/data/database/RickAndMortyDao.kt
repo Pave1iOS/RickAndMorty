@@ -8,6 +8,10 @@ import androidx.room.Query
 
 @Dao
 interface RickAndMortyDao {
+
+    @Query("SELECT * FROM characters")
+    fun getAllCharacters(): PagingSource<Int, RickAndMortyEntity>
+
     @Query("SELECT * FROM characters WHERE (:status IS NULL OR status = :status) AND (:gender IS NULL OR gender = :gender)")
     fun getCharacters(status: String?, gender: String?): PagingSource<Int, RickAndMortyEntity>
 
