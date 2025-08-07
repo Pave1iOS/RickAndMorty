@@ -9,10 +9,10 @@ import androidx.room.Query
 @Dao
 interface RickAndMortyDao {
     @Query("SELECT * FROM characters")
-    fun getCharacters(): PagingSource<Int, RickAndMortyCharacterEntity>
+    fun getCharacters(): PagingSource<Int, RickAndMortyEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCharacters(characters: List<RickAndMortyCharacterEntity>)
+    suspend fun insertCharacters(characters: List<RickAndMortyEntity>)
 
     @Query("DELETE FROM characters")
     suspend fun clearCharacters()

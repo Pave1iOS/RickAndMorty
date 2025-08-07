@@ -139,6 +139,7 @@ fun MainScreenContentPreview() {
 
     val fakeRickAndMortyCharacters = List(6) {
         RickAndMortyCharacter(
+            id = it,
             name = "Name $it",
             species = "Human",
             status = CharacterStatus.ALIVE,

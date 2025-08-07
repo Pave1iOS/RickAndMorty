@@ -46,6 +46,7 @@ fun CharactersGridScreen(
 fun CharactersGridScreenPreview() {
 
     val fakeRickAndMortyCharacter = RickAndMortyCharacter(
+        id = 1,
         name = "Name",
         species = "Species",
         status = CharacterStatus.ALIVE,

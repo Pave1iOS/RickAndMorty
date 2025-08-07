@@ -108,6 +108,7 @@ class MainScreen : ComponentActivity() {
 
      val fakeList = List(6) {
          RickAndMortyCharacter(
+             id = 1,
              name = "Character $it",
              status = CharacterStatus.ALIVE,
              species = "Human",

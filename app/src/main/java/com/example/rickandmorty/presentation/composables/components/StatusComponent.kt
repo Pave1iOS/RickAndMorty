@@ -68,6 +68,7 @@ fun StatusComponent(
 fun StatusComponentPreview() {
     val characters = listOf(
         RickAndMortyCharacter(
+            id = 1,
             name = "1",
             status = CharacterStatus.DEAD,
             species = "Human",
@@ -75,6 +76,7 @@ fun StatusComponentPreview() {
             image = ""
         ),
         RickAndMortyCharacter(
+            id = 2,
             name = "2",
             status = CharacterStatus.ALIVE,
             species = "Human",
@@ -82,6 +84,7 @@ fun StatusComponentPreview() {
             image = ""
         ),
         RickAndMortyCharacter(
+            id = 3,
             name = "3",
             status = CharacterStatus.UNKNOWN,
             species = "Human",

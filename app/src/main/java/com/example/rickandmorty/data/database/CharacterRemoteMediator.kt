@@ -14,18 +14,18 @@ class CharacterRemoteMediator(
     private val api: RickAndMortyAPI,
     private val status: String? = null,
     private val gender: String? = null
-) : RemoteMediator<Int, RickAndMortyCharacterEntity>() {
+) : RemoteMediator<Int, RickAndMortyEntity>() {
 
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, RickAndMortyCharacterEntity>
+        state: PagingState<Int, RickAndMortyEntity>
     ): MediatorResult {
         val page = when (loadType) {
             LoadType.REFRESH -> 1
             LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
             LoadType.APPEND -> {
                 val lastItem = state.lastItemOrNull()
-                if (lastItem == null) return MediatorResult.Success(endOfPaginationReached = true)
+                    ?: return MediatorResult.Success(endOfPaginationReached = true)
                 (state.pages.size + 1)
             }
         }
@@ -33,7 +33,8 @@ class CharacterRemoteMediator(
         return try {
             val response = api.getCharacters(page, status, gender)
             val entities = response.results.map {
-                RickAndMortyCharacterEntity(
+                RickAndMortyEntity(
+                    id = it.id,
                     name = it.name,
                     status = it.status,
                     species = it.species,
