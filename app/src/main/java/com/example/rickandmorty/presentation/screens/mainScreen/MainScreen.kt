@@ -25,6 +25,8 @@ import com.example.rickandmorty.presentation.composables.components.ErrorWindow
 import com.example.rickandmorty.presentation.composables.components.LoadIndicator
 import com.example.rickandmorty.theme.RickAndMortyTheme
 import com.example.rickandmorty.data.api.params.CharacterStatus
+import com.example.rickandmorty.domain.CharacterPagingSource
+import com.example.rickandmorty.utils.NetworkMonitor
 import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
 import javax.inject.Inject
 
@@ -57,7 +59,12 @@ class MainScreen : ComponentActivity() {
             val isAppending = characters.loadState.append is LoadState.Loading
             val isError = characters.loadState.refresh is LoadState.Error
 
+            val networkStatus = NetworkMonitor.getStatus()
+
             RickAndMortyTheme {
+
+
+
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
