@@ -12,6 +12,7 @@
     <string name="refresh_content">Обновление страницы</string>
     <string name="apply_filter">Применить фильтр</string>
     <string name="close_filter">Сбросить фильтр</string>
+    <string name="offline_message">Соединение с интернетом прервано 🥲</string>
 
 <!-- descriptions -->
     <string name="icon_search">Иконка поиска</string>

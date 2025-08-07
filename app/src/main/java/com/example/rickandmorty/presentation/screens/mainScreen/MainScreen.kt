@@ -26,6 +26,7 @@ import com.example.rickandmorty.presentation.composables.components.LoadIndicato
 import com.example.rickandmorty.theme.RickAndMortyTheme
 import com.example.rickandmorty.data.api.params.CharacterStatus
 import com.example.rickandmorty.domain.CharacterPagingSource
+import com.example.rickandmorty.presentation.composables.components.AutoDismissSnackbar
 import com.example.rickandmorty.utils.NetworkMonitor
 import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
 import javax.inject.Inject
@@ -63,8 +64,6 @@ class MainScreen : ComponentActivity() {
 
             RickAndMortyTheme {
 
-
-
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -91,6 +90,10 @@ class MainScreen : ComponentActivity() {
                                     }
                                 }
                             )
+
+                            if(networkStatus == NetworkMonitor.NetworkStatus.OFFLINE) {
+                                AutoDismissSnackbar(message = stringResource(R.string.offline_message))
+                            }
                         }
                     }
 
