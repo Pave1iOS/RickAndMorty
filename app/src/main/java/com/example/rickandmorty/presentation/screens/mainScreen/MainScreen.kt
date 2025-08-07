@@ -25,7 +25,6 @@ import com.example.rickandmorty.presentation.composables.components.ErrorWindow
 import com.example.rickandmorty.presentation.composables.components.LoadIndicator
 import com.example.rickandmorty.theme.RickAndMortyTheme
 import com.example.rickandmorty.data.api.params.CharacterStatus
-import com.example.rickandmorty.presentation.composables.sections.CharacterFilterScreen
 import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
 import javax.inject.Inject
 
@@ -50,15 +49,13 @@ class MainScreen : ComponentActivity() {
             val isFiltered by viewModel.isFiltered.collectAsState()
 
             val characters = if (isFiltered) {
-                viewModel.filteredCharacters.collectAsLazyPagingItems()
+                viewModel.getFilteredCharacters.collectAsLazyPagingItems()
             } else {
-                viewModel.charactersPagingFlow.collectAsLazyPagingItems()
+                viewModel.getAllCharacters.collectAsLazyPagingItems()
             }
 
             val isAppending = characters.loadState.append is LoadState.Loading
             val isError = characters.loadState.refresh is LoadState.Error
-
-
 
             RickAndMortyTheme {
                 Box(
@@ -78,12 +75,12 @@ class MainScreen : ComponentActivity() {
                         else -> {
                             MainScreenContent(
                                 rickAndMortyCharacters = characters,
-                                onApplyFilter = { status, gender ->
+                                isFiltered = { status, gender ->
 
                                     if(status == null && gender == null) {
                                         viewModel.clearFilter()
                                     } else {
-                                        viewModel.filterCharacters(status, gender)
+                                        viewModel.filteredCharacters(status, gender)
                                     }
                                 }
                             )
@@ -122,7 +119,7 @@ class MainScreen : ComponentActivity() {
      RickAndMortyTheme {
          MainScreenContent(
              rickAndMortyCharacters = pagingItems,
-             onApplyFilter = { _, _ -> }
+             isFiltered = { _, _ -> }
          )
      }
  }

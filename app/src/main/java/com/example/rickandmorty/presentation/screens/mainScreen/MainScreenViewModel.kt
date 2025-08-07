@@ -21,18 +21,16 @@ class MainScreenViewModel @Inject constructor(
 ): ViewModel() {
 
     private val _filteredCharacters = MutableStateFlow<PagingData<RickAndMortyCharacter>>(PagingData.empty())
-    val filteredCharacters: StateFlow<PagingData<RickAndMortyCharacter>> = _filteredCharacters
+    val getFilteredCharacters: StateFlow<PagingData<RickAndMortyCharacter>> = _filteredCharacters
 
     private val _isFiltered = MutableStateFlow(false)
     val isFiltered: StateFlow<Boolean> = _isFiltered
 
-
-    val charactersPagingFlow: Flow<PagingData<RickAndMortyCharacter>> =
+    val getAllCharacters: Flow<PagingData<RickAndMortyCharacter>> =
         repository.fetchCharacters()
-            .flow
             .cachedIn(viewModelScope)
 
-    fun filterCharacters(status: CharacterStatus?, gender: CharacterGender?) {
+    fun filteredCharacters(status: CharacterStatus?, gender: CharacterGender?) {
 
         _isFiltered.value = true
 
@@ -41,7 +39,6 @@ class MainScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
             repository.getFilteredCharacters(statusString, genderString)
-                .flow
                 .cachedIn(viewModelScope)
                 .collect {
                     _filteredCharacters.value = it
