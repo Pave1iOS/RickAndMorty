@@ -10,6 +10,7 @@ import com.example.rickandmorty.data.api.params.CharacterGender
 import com.example.rickandmorty.data.api.params.CharacterStatus
 import com.example.rickandmorty.domain.NetworkRepository
 import com.example.rickandmorty.utils.LogSource
+import com.example.rickandmorty.utils.NetworkMonitor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,6 +31,8 @@ class MainScreenViewModel @Inject constructor(
         repository.fetchCharacters()
             .cachedIn(viewModelScope)
 
+    val networkStatus = NetworkMonitor.getStatus()
+    
     fun filteredCharacters(status: CharacterStatus?, gender: CharacterGender?) {
 
         _isFiltered.value = true

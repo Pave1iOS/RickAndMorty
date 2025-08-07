@@ -25,8 +25,7 @@ import com.example.rickandmorty.presentation.composables.components.ErrorWindow
 import com.example.rickandmorty.presentation.composables.components.LoadIndicator
 import com.example.rickandmorty.theme.RickAndMortyTheme
 import com.example.rickandmorty.data.api.params.CharacterStatus
-import com.example.rickandmorty.domain.CharacterPagingSource
-import com.example.rickandmorty.presentation.composables.components.AutoDismissSnackbar
+import com.example.rickandmorty.presentation.composables.components.OfflineSnackbar
 import com.example.rickandmorty.utils.NetworkMonitor
 import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
 import javax.inject.Inject
@@ -60,8 +59,6 @@ class MainScreen : ComponentActivity() {
             val isAppending = characters.loadState.append is LoadState.Loading
             val isError = characters.loadState.refresh is LoadState.Error
 
-            val networkStatus = NetworkMonitor.getStatus()
-
             RickAndMortyTheme {
 
                 Box(
@@ -91,8 +88,8 @@ class MainScreen : ComponentActivity() {
                                 }
                             )
 
-                            if(networkStatus == NetworkMonitor.NetworkStatus.OFFLINE) {
-                                AutoDismissSnackbar(message = stringResource(R.string.offline_message))
+                            if(viewModel.networkStatus == OFFLINE) {
+                                OfflineSnackbar(message = stringResource(R.string.offline_message))
                             }
                         }
                     }
@@ -106,6 +103,10 @@ class MainScreen : ComponentActivity() {
                 }
             }
         }
+    }
+
+    companion object {
+        private val OFFLINE = NetworkMonitor.NetworkStatus.OFFLINE
     }
 }
 

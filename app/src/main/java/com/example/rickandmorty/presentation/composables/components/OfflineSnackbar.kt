@@ -11,10 +11,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import kotlinx.coroutines.delay
 
 @Composable
-fun AutoDismissSnackbar(
+fun OfflineSnackbar(
     modifier: Modifier = Modifier,
     message: String
 ) {
@@ -42,12 +41,12 @@ fun AutoDismissSnackbar(
 
 @Preview
 @Composable
-fun AutoDismissSnackbarPreview() {
+fun OfflineSnackbarPreview() {
     Box(
         modifier = Modifier
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        AutoDismissSnackbar(message = "Нет интернета")
+        OfflineSnackbar(message = "Нет интернета")
     }
 }
