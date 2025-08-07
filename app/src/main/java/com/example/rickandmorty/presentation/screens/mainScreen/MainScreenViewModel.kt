@@ -8,6 +8,7 @@ import androidx.paging.cachedIn
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.data.api.params.CharacterGender
 import com.example.rickandmorty.data.api.params.CharacterStatus
+import com.example.rickandmorty.data.database.RickAndMortyEntity
 import com.example.rickandmorty.domain.NetworkRepository
 import com.example.rickandmorty.utils.LogSource
 import kotlinx.coroutines.flow.Flow
@@ -19,6 +20,8 @@ import javax.inject.Inject
 class MainScreenViewModel @Inject constructor(
     private val repository: NetworkRepository
 ): ViewModel() {
+
+    val rickAndMortyCharacters = repository.getRickAndMortyCharacters().cachedIn(viewModelScope)
 
     private val _filteredCharacters = MutableStateFlow<PagingData<RickAndMortyCharacter>>(PagingData.empty())
     val filteredCharacters: StateFlow<PagingData<RickAndMortyCharacter>> = _filteredCharacters
@@ -53,7 +56,6 @@ class MainScreenViewModel @Inject constructor(
     fun clearFilter() {
         _isFiltered.value = false
     }
-
 
     companion object {
         private const val TAG = "MainScreenViewModel"

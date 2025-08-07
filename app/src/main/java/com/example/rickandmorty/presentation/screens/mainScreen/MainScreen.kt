@@ -58,7 +58,7 @@ class MainScreen : ComponentActivity() {
             val isAppending = characters.loadState.append is LoadState.Loading
             val isError = characters.loadState.refresh is LoadState.Error
 
-
+            val rickAndMortyCharacters = viewModel.rickAndMortyCharacters.collectAsLazyPagingItems()
 
             RickAndMortyTheme {
                 Box(
@@ -108,6 +108,7 @@ class MainScreen : ComponentActivity() {
 
      val fakeList = List(6) {
          RickAndMortyCharacter(
+             id = it,
              name = "Character $it",
              status = CharacterStatus.ALIVE,
              species = "Human",

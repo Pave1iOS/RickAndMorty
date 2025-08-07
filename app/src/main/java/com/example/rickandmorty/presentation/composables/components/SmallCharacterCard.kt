@@ -107,6 +107,7 @@ fun SmallCharacterCard(
 fun SmallCharacterCardPreview() {
 
     val fakeRickAndMortyCharacter = RickAndMortyCharacter(
+        id = 1,
         "Name",
         "Species",
         CharacterStatus.UNKNOWN,

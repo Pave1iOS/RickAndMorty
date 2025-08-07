@@ -1,6 +1,10 @@
 package com.example.rickandmorty.data.DI
 
+import android.app.Application
+import androidx.room.Room
 import com.example.rickandmorty.data.api.RickAndMortyAPI
+import com.example.rickandmorty.data.database.AppDatabase
+import com.example.rickandmorty.data.database.RickAndMortyDao
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -44,7 +48,23 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun RickAndMortyAPI(retrofit: Retrofit): RickAndMortyAPI {
+    fun provideDatabase(app: Application): AppDatabase {
+        return Room.databaseBuilder(
+            app,
+            AppDatabase::class.java,
+            "rick_and_morty_db"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCharacterDao(database: AppDatabase): RickAndMortyDao {
+        return database.rickAndMortyDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRickAndMortyAPI(retrofit: Retrofit): RickAndMortyAPI {
         return retrofit.create(RickAndMortyAPI::class.java)
     }
 

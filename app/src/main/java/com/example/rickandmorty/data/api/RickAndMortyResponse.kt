@@ -28,6 +28,8 @@ data class Info(
 
 @Serializable
 data class RickAndMortyCharacter(
+    @SerialName("id")
+    val id: Int,
     @SerialName("name")
     val name: String,
     @SerialName("species")
