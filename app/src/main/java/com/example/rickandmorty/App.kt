@@ -11,10 +11,17 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
 
+        instance = this
         appComponent = DaggerAppComponent.factory().create(this)
     }
 
+    fun getAppContext(): Context = applicationContext
+
     companion object {
+
+        lateinit var instance: App
+        private set
+
         fun get(context: Context): App {
             return context.applicationContext as App
         }

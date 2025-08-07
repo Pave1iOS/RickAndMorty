@@ -1,5 +1,8 @@
 package com.example.rickandmorty.domain
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig

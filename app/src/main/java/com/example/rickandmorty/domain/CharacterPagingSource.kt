@@ -1,8 +1,13 @@
 package com.example.rickandmorty.domain
 
+import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.example.rickandmorty.App
 import com.example.rickandmorty.data.api.RickAndMortyAPI
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.data.database.AppDatabase
@@ -27,34 +32,62 @@ class CharacterPagingSource @Inject constructor(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RickAndMortyCharacter> {
         val page = params.key ?: 1
+        val networkStatus = getNetworkStatus()
 
         Log.i(TAG, "${LogSource.NETWORK} page: $page")
 
         return try {
-            val response = api.getCharacters(page, status = status, gender = gender)
-            val characters = response.results
 
-            Log.i(TAG, "${LogSource.NETWORK} getting: $characters")
+            val characters = when(networkStatus) {
 
-            val entities = characters.map {
-                RickAndMortyEntity(
-                    id = it.id,
-                    name = it.name,
-                    status = it.status,
-                    gender = it.gender,
-                    species = it.species,
-                    image = it.image
-                )
+                NetworkStatus.ONLINE -> {
+                    Log.i(TAG, "${LogSource.NETWORK} is online")
+
+                    val response = api.getCharacters(page, status = status, gender = gender)
+                    val characters = response.results
+
+                    val entities = characters.map {
+                        RickAndMortyEntity(
+                            id = it.id,
+                            name = it.name,
+                            status = it.status,
+                            gender = it.gender,
+                            species = it.species,
+                            image = it.image
+                        )
+                    }
+
+                    database.rickAndMortyDao().insertAll(entities)
+                    Log.i(TAG, "${LogSource.DATABASE} insert: $entities")
+
+                    characters
+                }
+
+                NetworkStatus.OFFLINE -> {
+                    Log.i(TAG, "${LogSource.NETWORK} is offline")
+
+                    val cached = database.rickAndMortyDao().getCachedCharacters(status = status, gender = gender)
+
+                    cached.map {
+                        RickAndMortyCharacter(
+                            id = it.id,
+                            name = it.name,
+                            status = it.status,
+                            gender = it.gender,
+                            species = it.species,
+                            image = it.image
+                        )
+                    }
+                }
             }
 
-            database.rickAndMortyDao().insertAll(entities)
-
-            Log.i(TAG, "${LogSource.DATABASE} insert: $entities")
-
             LoadResult.Page(
-                data = response.results,
+                data = characters,
                 prevKey = if (page == 1) null else page - 1,
-                nextKey = if (response.info.next == null) null else page + 1
+                nextKey = when {
+                    networkStatus == NetworkStatus.ONLINE && characters.isNotEmpty() -> page + 1
+                    else -> null
+                }
             )
         } catch (e: Exception) {
             Log.e(TAG, "${LogSource.NETWORK} error: ${e.message}")
@@ -64,5 +97,22 @@ class CharacterPagingSource @Inject constructor(
 
     companion object {
         private const val TAG = "CharacterPagingSource"
+
+        enum class NetworkStatus {
+            ONLINE,
+            OFFLINE
+        }
+
+        fun getNetworkStatus(): NetworkStatus {
+            val context = App.instance.getAppContext()
+            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val network = connectivityManager.activeNetwork ?: return NetworkStatus.OFFLINE
+            val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return NetworkStatus.OFFLINE
+            return if (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
+                NetworkStatus.ONLINE
+            } else {
+                NetworkStatus.OFFLINE
+            }
+        }
     }
 }
