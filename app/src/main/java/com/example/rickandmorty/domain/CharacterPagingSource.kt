@@ -3,16 +3,17 @@ package com.example.rickandmorty.domain
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.data.api.RickAndMortyAPI
-import com.example.rickandmorty.data.api.params.CharacterGender
-import com.example.rickandmorty.data.api.params.CharacterStatus
+import com.example.rickandmorty.data.api.RickAndMortyCharacter
+import com.example.rickandmorty.data.database.AppDatabase
+import com.example.rickandmorty.data.database.RickAndMortyEntity
 import com.example.rickandmorty.utils.LogSource
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class CharacterPagingSource @Inject constructor(
+    private val database: AppDatabase,
     private val api: RickAndMortyAPI,
     private val status: String? = null,
     private val gender: String? = null
@@ -31,6 +32,25 @@ class CharacterPagingSource @Inject constructor(
 
         return try {
             val response = api.getCharacters(page, status = status, gender = gender)
+            val characters = response.results
+
+            Log.i(TAG, "${LogSource.NETWORK} getting: $characters")
+
+            val entities = characters.map {
+                RickAndMortyEntity(
+                    id = it.id,
+                    name = it.name,
+                    status = it.status,
+                    gender = it.gender,
+                    species = it.species,
+                    image = it.image
+                )
+            }
+
+            database.rickAndMortyDao().insertAll(entities)
+
+            Log.i(TAG, "${LogSource.DATABASE} insert: $entities")
+
             LoadResult.Page(
                 data = response.results,
                 prevKey = if (page == 1) null else page - 1,

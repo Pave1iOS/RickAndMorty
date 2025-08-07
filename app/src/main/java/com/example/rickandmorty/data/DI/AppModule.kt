@@ -1,5 +1,6 @@
 package com.example.rickandmorty.data.DI
 
+import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.example.rickandmorty.data.api.RickAndMortyAPI
@@ -49,9 +50,9 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun getDatabase(context: Context): AppDatabase {
+    fun getDatabase(application: Application): AppDatabase {
         return Room.databaseBuilder(
-            context,
+            application,
             AppDatabase::class.java,
             "rick_and_morty_db"
         )

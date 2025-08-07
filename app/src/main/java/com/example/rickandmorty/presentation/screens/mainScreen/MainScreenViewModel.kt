@@ -28,7 +28,7 @@ class MainScreenViewModel @Inject constructor(
 
 
     val charactersPagingFlow: Flow<PagingData<RickAndMortyCharacter>> =
-        repository.getPagingCharacter()
+        repository.fetchCharacters()
             .flow
             .cachedIn(viewModelScope)
 

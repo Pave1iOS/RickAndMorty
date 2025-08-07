@@ -1,15 +1,11 @@
 package com.example.rickandmorty.domain
 
 import android.util.Log
-import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.data.api.RickAndMortyAPI
-import com.example.rickandmorty.data.api.params.CharacterGender
-import com.example.rickandmorty.data.api.params.CharacterStatus
 import com.example.rickandmorty.data.database.AppDatabase
-import com.example.rickandmorty.data.database.CharacterRemoteMediator
 import com.example.rickandmorty.data.database.RickAndMortyEntity
 import com.example.rickandmorty.utils.LogSource
 import javax.inject.Inject
@@ -21,29 +17,35 @@ class NetworkRepository @Inject constructor(
     private val database: AppDatabase
 ) {
 
-    fun getPagingCharacter(): Pager<Int, RickAndMortyCharacter> {
-        return Pager(
-            config = PagingConfig(pageSize = 20),
-            pagingSourceFactory = { CharacterPagingSource(api) }
-        )
-    }
+    fun fetchCharacters(): Pager<Int, RickAndMortyCharacter> {
 
-    @OptIn(ExperimentalPagingApi::class)
-    fun getCashedCharacters(
-        status: String? = null,
-        gender: String? = null
-    ): Pager<Int, RickAndMortyEntity> {
+        Log.i(TAG, "${LogSource.NETWORK} fetching all characters")
+
         return Pager(
             config = PagingConfig(pageSize = 20),
-            remoteMediator = CharacterRemoteMediator(database, api, status, gender),
-            pagingSourceFactory = { database.rickAndMortyDao().getCharacters() }
+            pagingSourceFactory = {
+                CharacterPagingSource(
+                    api = api,
+                    database = database
+                )
+            }
         )
     }
 
     fun getFilteredCharacters(status: String?, gender: String?): Pager<Int, RickAndMortyCharacter> {
+
+        Log.i(TAG, "${LogSource.NETWORK} fetching filter characters by status: $status, gender: $gender")
+
         return Pager(
             config = PagingConfig(pageSize = 20),
-            pagingSourceFactory = { CharacterPagingSource(api, status, gender) }
+            pagingSourceFactory = {
+                CharacterPagingSource(
+                    database = database,
+                    api = api,
+                    status= status,
+                    gender = gender
+                )
+            }
         )
     }
 
