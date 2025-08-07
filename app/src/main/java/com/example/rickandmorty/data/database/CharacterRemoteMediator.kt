@@ -7,9 +7,10 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.example.rickandmorty.data.api.RickAndMortyAPI
+import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
-class CharacterRemoteMediator(
+class CharacterRemoteMediator @Inject constructor(
     private val database: AppDatabase,
     private val api: RickAndMortyAPI,
     private val status: String? = null,
@@ -24,7 +25,7 @@ class CharacterRemoteMediator(
             LoadType.REFRESH -> 1
             LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
             LoadType.APPEND -> {
-                val lastItem = state.lastItemOrNull()
+                state.lastItemOrNull()
                     ?: return MediatorResult.Success(endOfPaginationReached = true)
                 (state.pages.size + 1)
             }
