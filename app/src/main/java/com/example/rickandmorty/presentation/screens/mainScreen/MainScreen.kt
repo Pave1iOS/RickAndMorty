@@ -88,6 +88,16 @@ class MainScreen : ComponentActivity() {
                                 }
                             )
 
+                            if () {
+                                ErrorWindow(
+                                    text = stringResource(R.string.empty_list_message),
+                                    isError = false,
+                                    onDismiss = {
+                                        viewModel.clearFilter()
+                                    }
+                                )
+                            }
+
                             if(viewModel.networkStatus == OFFLINE) {
                                 OfflineSnackbar(message = stringResource(R.string.offline_message))
                             }

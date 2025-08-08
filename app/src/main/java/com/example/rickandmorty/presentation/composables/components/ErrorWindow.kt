@@ -34,6 +34,7 @@ import com.example.rickandmorty.R
 fun ErrorWindow(
     modifier: Modifier = Modifier,
     text: String = "",
+    isError: Boolean = true,
     onDismiss: () -> Unit = {}
 ) {
     BoxWithConstraints(
@@ -68,8 +69,9 @@ fun ErrorWindow(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "${stringResource(R.string.error)}: $text",
-                    color = colorResource(id = R.color.error_message)
+                    text = if(isError) "${stringResource(R.string.error)}: $text" else text,
+                    color = if(isError) colorResource(id = R.color.error_message)
+                    else colorResource(R.color.black)
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -103,6 +105,9 @@ fun ErrorWindowPreview() {
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        ErrorWindow()
+        ErrorWindow(
+            text = "Hello",
+            isError = false
+        )
     }
 }
