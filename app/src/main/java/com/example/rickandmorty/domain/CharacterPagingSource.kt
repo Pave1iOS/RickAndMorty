@@ -27,7 +27,10 @@ class CharacterPagingSource @Inject constructor(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RickAndMortyCharacter> {
+
         val page = params.key ?: 1
+        val pageSize = params.loadSize
+        val offset = (page - 1) * pageSize
         val networkStatus = NetworkMonitor.getStatus()
 
         NetworkMonitor.logStatus(TAG)
@@ -63,8 +66,15 @@ class CharacterPagingSource @Inject constructor(
 
                 OFFLINE -> {
 
-                    val cached = database.rickAndMortyDao().getCharacters(status = status, gender = gender)
+                    val cached = database.rickAndMortyDao().getCharacters(
+                        status = status,
+                        gender = gender,
+                        limit = pageSize,
+                        offset = offset
+                    )
+
                     Log.i(TAG, "${LogSource.DATABASE} get: $cached")
+                    Log.i(TAG, "${LogSource.DATABASE} pageSize: $pageSize, offset: $offset")
 
                     cached.map {
                         RickAndMortyCharacter(
@@ -84,10 +94,7 @@ class CharacterPagingSource @Inject constructor(
             LoadResult.Page(
                 data = characters,
                 prevKey = if (page == 1) null else page - 1,
-                nextKey = when {
-                    networkStatus == ONLINE && characters.isNotEmpty() -> page + 1
-                    else -> null
-                }
+                nextKey = if (characters.size < pageSize) null else page + 1
             )
         } catch (e: Exception) {
             Log.e(TAG, "${LogSource.NETWORK} error: ${e.message}")

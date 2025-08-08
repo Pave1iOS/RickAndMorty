@@ -37,8 +37,8 @@ class MainScreenViewModel @Inject constructor(
 
         _isFiltered.value = true
 
-        val statusString = status?.displayName
-        val genderString = gender?.displayName
+        val statusString = status?.name
+        val genderString = gender?.name
 
         viewModelScope.launch {
             repository.getFilteredCharacters(statusString, genderString)
