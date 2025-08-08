@@ -58,6 +58,7 @@ class MainScreen : ComponentActivity() {
 
             val isAppending = characters.loadState.append is LoadState.Loading
             val isError = characters.loadState.refresh is LoadState.Error
+            val isLoadingCompleted = characters.loadState.refresh is LoadState.NotLoading
 
             RickAndMortyTheme {
 
@@ -88,7 +89,7 @@ class MainScreen : ComponentActivity() {
                                 }
                             )
 
-                            if () {
+                            if (characters.itemCount == 0 && isLoadingCompleted) {
                                 ErrorWindow(
                                     text = stringResource(R.string.empty_list_message),
                                     isError = false,
