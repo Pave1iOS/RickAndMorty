@@ -12,11 +12,13 @@ interface RickAndMortyDao {
         SELECT * FROM characters 
         WHERE (:status IS NULL OR status = :status) 
         AND (:gender IS NULL OR gender = :gender) 
+        AND (:name IS NULL OR name LIKE '%' || :name || '%')
         LIMIT :limit OFFSET :offset
     """)
     suspend fun getCharacters(
         status: String?,
         gender: String?,
+        name: String?,
         limit: Int,
         offset: Int
     ): List<RickAndMortyEntity>

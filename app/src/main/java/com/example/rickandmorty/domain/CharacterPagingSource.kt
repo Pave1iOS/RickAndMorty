@@ -70,6 +70,7 @@ class CharacterPagingSource @Inject constructor(
                     val cached = database.rickAndMortyDao().getCharacters(
                         status = status,
                         gender = gender,
+                        name = name,
                         limit = NETWORK_PAGE_SIZE,
                         offset = offset
                     )

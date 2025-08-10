@@ -54,7 +54,8 @@ class MainScreen : ComponentActivity() {
 
                 val isAppending = characters.loadState.append is LoadState.Loading
                 val isError = characters.loadState.refresh is LoadState.Error
-                val isEmptyList = characters.loadState.refresh is LoadState.NotLoading
+                val isListEmpty = characters.loadState.refresh is LoadState.NotLoading &&
+                        characters.itemCount == 0
 
                 Box(
                     modifier = Modifier
@@ -82,7 +83,7 @@ class MainScreen : ComponentActivity() {
                                 }
                             )
 
-                            if (isEmptyList && characters.itemCount == 0) {
+                            if (isListEmpty) {
                                 ErrorWindow(
                                     text = stringResource(R.string.empty_list_message),
                                     isError = false,
