@@ -85,9 +85,15 @@ fun MainScreenContainer(viewModel: MainScreenViewModel) {
             when {
                 isError -> {
                     val error = characters.loadState.refresh as LoadState.Error
+
                     ErrorWindow(
-                        text = error.error.localizedMessage
-                            ?: stringResource(R.string.unknown_error)
+                        text = stringResource(R.string.empty_list_message),
+                        errorType = ErrorType.DATA,
+                        onDismiss = {
+                            viewModel.clearFilter()
+
+                            Log.d(LogSource.INTERFACE, "${LogSource.UI} MainScreenContainer - clear filter")
+                        }
                     )
                 }
                 else -> {
