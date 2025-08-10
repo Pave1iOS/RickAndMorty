@@ -22,16 +22,16 @@ class CharacterPagingSource @Inject constructor(
 ) : PagingSource<Int, RickAndMortyCharacter>() {
 
     override fun getRefreshKey(state: PagingState<Int, RickAndMortyCharacter>): Int? {
-        return state.anchorPosition?.let {
-            state.closestPageToPosition(it)?.nextKey?.minus(1)
+        return state.anchorPosition?.let { position ->
+            val anchorPage = state.closestPageToPosition(position)
+            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RickAndMortyCharacter> {
 
         val page = params.key ?: 1
-        val pageSize = params.loadSize
-        val offset = (page - 1) * pageSize
+        val offset = (page - 1) * NETWORK_PAGE_SIZE
         val networkStatus = NetworkMonitor.getStatus()
 
         NetworkMonitor.logStatus(TAG)
@@ -70,12 +70,11 @@ class CharacterPagingSource @Inject constructor(
                     val cached = database.rickAndMortyDao().getCharacters(
                         status = status,
                         gender = gender,
-                        limit = pageSize,
+                        limit = NETWORK_PAGE_SIZE,
                         offset = offset
                     )
 
                     Log.i(TAG, "${LogSource.DATABASE} get: $cached")
-                    Log.i(TAG, "${LogSource.DATABASE} pageSize: $pageSize, offset: $offset")
 
                     cached.map {
                         RickAndMortyCharacter(
@@ -95,7 +94,7 @@ class CharacterPagingSource @Inject constructor(
             LoadResult.Page(
                 data = characters,
                 prevKey = if (page == 1) null else page - 1,
-                nextKey = if (characters.size < pageSize) null else page + 1
+                nextKey = if (characters.size < NETWORK_PAGE_SIZE) null else page + 1
             )
         } catch (e: Exception) {
             Log.e(TAG, "${LogSource.NETWORK} error: ${e.message}")
@@ -107,6 +106,6 @@ class CharacterPagingSource @Inject constructor(
         private const val TAG = "CharacterPagingSource"
         private val ONLINE = NetworkMonitor.NetworkStatus.ONLINE
         private val OFFLINE = NetworkMonitor.NetworkStatus.OFFLINE
-
+        private const val NETWORK_PAGE_SIZE = 20
     }
 }
