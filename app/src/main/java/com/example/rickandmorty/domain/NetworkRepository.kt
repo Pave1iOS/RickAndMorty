@@ -1,8 +1,5 @@
 package com.example.rickandmorty.domain
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -36,9 +33,12 @@ class NetworkRepository @Inject constructor(
         ).flow
     }
 
-    fun getFilteredCharacters(status: String?, gender: String?): Flow<PagingData<RickAndMortyCharacter>> {
+    fun fetchFilteredCharacters(status: String?, gender: String?, name: String?): Flow<PagingData<RickAndMortyCharacter>> {
 
-        Log.i(TAG, "${LogSource.NETWORK} fetching filter characters by status: $status, gender: $gender")
+        Log.i(TAG, "${LogSource.NETWORK} fetching filter characters by \n" +
+                "- status: $status \n" +
+                "- gender: $gender \n" +
+                "- name: $name")
 
         return Pager(
             config = PagingConfig(pageSize = 20),
@@ -47,7 +47,8 @@ class NetworkRepository @Inject constructor(
                     database = database,
                     api = api,
                     status= status,
-                    gender = gender
+                    gender = gender,
+                    name = name
                 )
             }
         ).flow

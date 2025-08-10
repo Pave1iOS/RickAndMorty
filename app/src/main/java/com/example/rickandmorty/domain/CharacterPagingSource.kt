@@ -16,6 +16,7 @@ import javax.inject.Singleton
 class CharacterPagingSource @Inject constructor(
     private val database: AppDatabase,
     private val api: RickAndMortyAPI,
+    private val name: String? = null,
     private val status: String? = null,
     private val gender: String? = null
 ) : PagingSource<Int, RickAndMortyCharacter>() {
@@ -42,7 +43,7 @@ class CharacterPagingSource @Inject constructor(
                 ONLINE -> {
                     Log.i(TAG, "${LogSource.NETWORK} page: $page")
 
-                    val response = api.getCharacters(page, status = status, gender = gender)
+                    val response = api.getCharacters(page, status = status, gender = gender, name = name)
                     val characters = response.results
 
                     Log.i(TAG, "${LogSource.NETWORK} data: $characters")

@@ -1,5 +1,6 @@
 package com.example.rickandmorty.presentation.screens.mainScreen
 
+import MainScreenContent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,12 +21,11 @@ import com.example.rickandmorty.App
 import com.example.rickandmorty.R
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.data.api.params.CharacterGender
-import com.example.rickandmorty.presentation.composables.MainScreenContent
+import com.example.rickandmorty.data.api.params.CharacterStatus
 import com.example.rickandmorty.presentation.composables.components.ErrorWindow
 import com.example.rickandmorty.presentation.composables.components.LoadIndicator
-import com.example.rickandmorty.theme.RickAndMortyTheme
-import com.example.rickandmorty.data.api.params.CharacterStatus
 import com.example.rickandmorty.presentation.composables.components.OfflineSnackbar
+import com.example.rickandmorty.theme.RickAndMortyTheme
 import com.example.rickandmorty.utils.NetworkMonitor
 import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
 import javax.inject.Inject
@@ -41,26 +41,20 @@ class MainScreen : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         WindowCompat.setDecorFitsSystemWindows(window, false)
-
         App.get(this).appComponent.inject(this)
 
         setContent {
-
-            val isFiltered by viewModel.isFiltered.collectAsState()
-
-            val characters = if (isFiltered) {
-                viewModel.getFilteredCharacters.collectAsLazyPagingItems()
-            } else {
-                viewModel.getAllCharacters.collectAsLazyPagingItems()
-            }
-
-            val isAppending = characters.loadState.append is LoadState.Loading
-            val isError = characters.loadState.refresh is LoadState.Error
-            val isLoadingCompleted = characters.loadState.refresh is LoadState.NotLoading
-
             RickAndMortyTheme {
+
+                val searchQuery by viewModel.searchQuery.collectAsState()
+                val networkStatus = viewModel.networkStatus
+
+                val characters = viewModel.characters.collectAsLazyPagingItems()
+
+                val isAppending = characters.loadState.append is LoadState.Loading
+                val isError = characters.loadState.refresh is LoadState.Error
+                val isEmptyList = characters.loadState.refresh is LoadState.NotLoading
 
                 Box(
                     modifier = Modifier
@@ -79,17 +73,16 @@ class MainScreen : ComponentActivity() {
                         else -> {
                             MainScreenContent(
                                 rickAndMortyCharacters = characters,
-                                isFiltered = { status, gender ->
-
-                                    if(status == null && gender == null) {
-                                        viewModel.clearFilter()
-                                    } else {
-                                        viewModel.filteredCharacters(status, gender)
-                                    }
+                                searchQuery = searchQuery,
+                                onSearchQueryChange = {
+                                    viewModel.setSearchQuery(it)
+                                },
+                                onFilterChange = { status, gender ->
+                                    viewModel.setFilters(status, gender)
                                 }
                             )
 
-                            if (characters.itemCount == 0 && isLoadingCompleted) {
+                            if (isEmptyList && characters.itemCount == 0) {
                                 ErrorWindow(
                                     text = stringResource(R.string.empty_list_message),
                                     isError = false,
@@ -99,7 +92,7 @@ class MainScreen : ComponentActivity() {
                                 )
                             }
 
-                            if(viewModel.networkStatus == OFFLINE) {
+                            if(networkStatus == OFFLINE) {
                                 OfflineSnackbar(message = stringResource(R.string.offline_message))
                             }
                         }
@@ -141,10 +134,9 @@ class MainScreen : ComponentActivity() {
      RickAndMortyTheme {
          MainScreenContent(
              rickAndMortyCharacters = pagingItems,
-             isFiltered = { _, _ -> }
+             searchQuery = "",
+             onSearchQueryChange = {},
+             onFilterChange = { _, _ -> }
          )
      }
  }
-
-
-
