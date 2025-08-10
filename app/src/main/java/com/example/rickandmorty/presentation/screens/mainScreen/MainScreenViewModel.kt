@@ -1,5 +1,6 @@
 package com.example.rickandmorty.presentation.screens.mainScreen
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -32,7 +33,13 @@ class MainScreenViewModel @Inject constructor(
 
     val searchQuery: StateFlow<String> = _searchQuery
 
-    val networkStatus = NetworkMonitor.getStatus()
+    val networkStatus: StateFlow<NetworkMonitor.NetworkStatus> =
+        NetworkMonitor.getStatusFlow()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = NetworkMonitor.NetworkStatus.ONLINE
+        )
 
     val characters =
         combine(

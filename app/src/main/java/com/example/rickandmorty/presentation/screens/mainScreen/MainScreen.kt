@@ -4,27 +4,14 @@ import MainScreenContent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.paging.LoadState
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.rickandmorty.App
-import com.example.rickandmorty.R
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.data.api.params.CharacterGender
 import com.example.rickandmorty.data.api.params.CharacterStatus
-import com.example.rickandmorty.presentation.composables.components.ErrorWindow
-import com.example.rickandmorty.presentation.composables.components.LoadIndicator
-import com.example.rickandmorty.presentation.composables.components.OfflineSnackbar
 import com.example.rickandmorty.theme.RickAndMortyTheme
 import com.example.rickandmorty.utils.NetworkMonitor
 import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
@@ -46,98 +33,35 @@ class MainScreen : ComponentActivity() {
 
         setContent {
             RickAndMortyTheme {
-
-                val searchQuery by viewModel.searchQuery.collectAsState()
-                val networkStatus = viewModel.networkStatus
-
-                val characters = viewModel.characters.collectAsLazyPagingItems()
-
-                val isAppending = characters.loadState.append is LoadState.Loading
-                val isError = characters.loadState.refresh is LoadState.Error
-                val isListEmpty = characters.loadState.refresh is LoadState.NotLoading &&
-                        characters.itemCount == 0
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    when {
-
-                        isError -> {
-
-                            val error = characters.loadState.refresh as LoadState.Error
-
-                            ErrorWindow(text = error.error.localizedMessage
-                                ?: stringResource(R.string.unknown_error))
-                        }
-
-                        else -> {
-                            MainScreenContent(
-                                rickAndMortyCharacters = characters,
-                                searchQuery = searchQuery,
-                                onSearchQueryChange = {
-                                    viewModel.setSearchQuery(it)
-                                },
-                                onFilterChange = { status, gender ->
-                                    viewModel.setFilters(status, gender)
-                                }
-                            )
-
-                            if (isListEmpty) {
-                                ErrorWindow(
-                                    text = stringResource(R.string.empty_list_message),
-                                    isError = false,
-                                    onDismiss = {
-                                        viewModel.clearFilter()
-                                    }
-                                )
-                            }
-
-                            if(networkStatus == OFFLINE) {
-                                OfflineSnackbar(message = stringResource(R.string.offline_message))
-                            }
-                        }
-                    }
-
-                    if (isAppending) {
-                        LoadIndicator(
-                            modifier = Modifier
-                                .align(Alignment.BottomCenter)
-                        )
-                    }
-                }
+                MainScreenContainer(viewModel = viewModel)
             }
         }
     }
-
-    companion object {
-        private val OFFLINE = NetworkMonitor.NetworkStatus.OFFLINE
-    }
 }
 
- @Preview
- @Composable
- fun MainScreenPreview() {
+@Preview
+@Composable
+fun MainScreenPreview() {
 
-     val fakeList = List(6) {
-         RickAndMortyCharacter(
-             id = 1,
-             name = "Character $it",
-             status = CharacterStatus.ALIVE,
-             species = "Human",
-             gender = CharacterGender.UNKNOWN,
-             image = ""
-         )
-     }
+    val fakeList = List(6) {
+        RickAndMortyCharacter(
+            id = 1,
+            name = "Character $it",
+            status = CharacterStatus.ALIVE,
+            species = "Human",
+            gender = CharacterGender.UNKNOWN,
+            image = ""
+        )
+    }
 
-     val pagingItems = rememberFakeLazyPagingItems(fakeList)
+    val pagingItems = rememberFakeLazyPagingItems(fakeList)
 
-     RickAndMortyTheme {
-         MainScreenContent(
-             rickAndMortyCharacters = pagingItems,
-             searchQuery = "",
-             onSearchQueryChange = {},
-             onFilterChange = { _, _ -> }
-         )
-     }
- }
+    RickAndMortyTheme {
+        MainScreenContent(
+            rickAndMortyCharacters = pagingItems,
+            searchQuery = "",
+            onSearchQueryChange = {},
+            onFilterChange = { _, _ -> }
+        )
+    }
+}

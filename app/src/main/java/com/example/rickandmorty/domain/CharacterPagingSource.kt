@@ -34,8 +34,6 @@ class CharacterPagingSource @Inject constructor(
         val offset = (page - 1) * NETWORK_PAGE_SIZE
         val networkStatus = NetworkMonitor.getStatus()
 
-        NetworkMonitor.logStatus(TAG)
-
         return try {
 
             val characters = when(networkStatus) {

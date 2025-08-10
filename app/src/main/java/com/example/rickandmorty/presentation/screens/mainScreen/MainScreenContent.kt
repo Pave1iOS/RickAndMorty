@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -28,6 +29,7 @@ import com.example.rickandmorty.presentation.composables.components.RefreshIndic
 import com.example.rickandmorty.presentation.composables.sections.CharacterFilterScreen
 import com.example.rickandmorty.presentation.composables.sections.CharactersGridScreen
 import com.example.rickandmorty.presentation.composables.sections.SearchBar
+import com.example.rickandmorty.theme.RickAndMortyTheme
 import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -43,88 +45,82 @@ fun MainScreenContent(
     var showFilter by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val gridState = rememberLazyGridState()
-    val isFirstLoad = rickAndMortyCharacters.loadState.refresh is LoadState.Loading
-            && rickAndMortyCharacters.itemCount == 0
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(10.dp)
-    ) {
-        SearchBar(
-            modifier = Modifier.fillMaxWidth(),
-            query = searchQuery,
-            onQueryChange = { query ->
-                onSearchQueryChange(query) // просто передаём текст во ViewModel
-            }
-        )
-
-        Spacer(modifier = Modifier.size(10.dp))
-
-        if (isFirstLoad) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                LoadIndicator()
-            }
-        } else {
-            SwipeRefresh(
-                state = rememberSwipeRefreshState(
-                    rickAndMortyCharacters.loadState.refresh is LoadState.Loading
-                ),
-                onRefresh = {
-                    coroutineScope.launch {
-                        rickAndMortyCharacters.refresh()
-                    }
-                },
-                indicator = { state, _ ->
-                    Box(
-                        modifier = Modifier
-                            .size(80.dp)
-                            .padding(top = 12.dp),
-                        contentAlignment = Alignment.TopCenter
-                    ) {
-                        RefreshIndicator(isRefreshing = state.isRefreshing)
-                    }
-                }
-            ) {
-
-                LaunchedEffect(rickAndMortyCharacters.loadState.refresh) {
-                    if (rickAndMortyCharacters.loadState.refresh is LoadState.NotLoading &&
-                        rickAndMortyCharacters.itemCount > 0
-                    ) {
-                        gridState.scrollToItem(0)
-                    }
-                }
-
-                CharactersGridScreen(
-                    modifier = Modifier.fillMaxWidth(),
-                    rickAndMortyCharacters = rickAndMortyCharacters,
-                    gridState = gridState
-                )
-            }
+    // Скролл вверх при обновлении списка
+    LaunchedEffect(rickAndMortyCharacters.loadState.refresh) {
+        if (rickAndMortyCharacters.loadState.refresh is LoadState.NotLoading &&
+            rickAndMortyCharacters.itemCount > 0
+        ) {
+            gridState.scrollToItem(0)
         }
     }
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        ButtonFilter(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 25.dp, bottom = 25.dp),
-            onClick = { showFilter = true }
-        )
-    }
+    val isFirstLoad = rickAndMortyCharacters.loadState.refresh is LoadState.Loading &&
+            rickAndMortyCharacters.itemCount == 0
 
-    if (showFilter) {
-        CharacterFilterScreen(
-            onApplyFilter = { status, gender ->
-                onFilterChange(status, gender) // передаём выбор фильтров во ViewModel
-                showFilter = false
+    Scaffold(
+        floatingActionButton = {
+            ButtonFilter(onClick = { showFilter = true })
+        }
+    ) { paddingValues ->
+
+        RickAndMortyTheme {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(10.dp)
+            ) {
+                SearchBar(
+                    modifier = Modifier.fillMaxWidth(),
+                    query = searchQuery,
+                    onQueryChange = onSearchQueryChange
+                )
+
+                Spacer(modifier = Modifier.size(10.dp))
+
+                if (isFirstLoad) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        LoadIndicator()
+                    }
+                } else {
+                    SwipeRefresh(
+                        state = rememberSwipeRefreshState(
+                            rickAndMortyCharacters.loadState.refresh is LoadState.Loading
+                        ),
+                        onRefresh = { coroutineScope.launch { rickAndMortyCharacters.refresh() } },
+                        indicator = { state, _ ->
+                            Box(
+                                modifier = Modifier
+                                    .size(80.dp)
+                                    .padding(top = 12.dp),
+                                contentAlignment = Alignment.TopCenter
+                            ) {
+                                RefreshIndicator(isRefreshing = state.isRefreshing)
+                            }
+                        }
+                    ) {
+                        CharactersGridScreen(
+                            modifier = Modifier.fillMaxWidth(),
+                            rickAndMortyCharacters = rickAndMortyCharacters,
+                            gridState = gridState
+                        )
+                    }
+                }
             }
-        )
+        }
+
+        if (showFilter) {
+            CharacterFilterScreen(
+                onApplyFilter = { status, gender ->
+                    onFilterChange(status, gender)
+                    showFilter = false
+                }
+            )
+        }
     }
 }
 

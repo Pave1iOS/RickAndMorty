@@ -23,7 +23,7 @@ class NetworkRepository @Inject constructor(
         Log.i(TAG, "${LogSource.NETWORK} fetching all characters")
 
         return Pager(
-            config = PagingConfig(pageSize = 20),
+            config = PagingConfig(pageSize = NETWORK_PAGE_SIZE),
             pagingSourceFactory = {
                 CharacterPagingSource(
                     api = api,
@@ -38,10 +38,10 @@ class NetworkRepository @Inject constructor(
         Log.i(TAG, "${LogSource.NETWORK} fetching filter characters by \n" +
                 "- status: $status \n" +
                 "- gender: $gender \n" +
-                "- name: $name")
+                "- name: ${name?.ifBlank { "empty" }}")
 
         return Pager(
-            config = PagingConfig(pageSize = 20),
+            config = PagingConfig(pageSize = NETWORK_PAGE_SIZE),
             pagingSourceFactory = {
                 CharacterPagingSource(
                     database = database,
@@ -56,5 +56,6 @@ class NetworkRepository @Inject constructor(
 
     companion object {
         private const val TAG = "NetworkRepository"
+        private const val NETWORK_PAGE_SIZE = 20
     }
 }
