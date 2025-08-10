@@ -28,6 +28,7 @@ import com.example.rickandmorty.data.api.params.CharacterStatus
 import com.example.rickandmorty.presentation.composables.components.ErrorWindow
 import com.example.rickandmorty.presentation.composables.components.LoadIndicator
 import com.example.rickandmorty.theme.RickAndMortyTheme
+import com.example.rickandmorty.utils.ErrorType
 import com.example.rickandmorty.utils.LogSource
 import com.example.rickandmorty.utils.NetworkMonitor
 import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
@@ -54,14 +55,13 @@ fun MainScreenContainer(viewModel: MainScreenViewModel) {
 
                 characters.refresh()
 
-                Log.d("UI", "${LogSource.UI} MainScreenContainer - online")
-                Log.d("UI", "${LogSource.UI} MainScreenContainer - characters refresh")
+                Log.d(LogSource.INTERFACE, "${LogSource.UI} MainScreenContainer - online -> characters refresh")
             }
             lastStatus == NetworkMonitor.NetworkStatus.ONLINE &&
                     networkStatus == NetworkMonitor.NetworkStatus.OFFLINE -> {
                 scaffoldState.snackbarHostState.showSnackbar(offlineMessage)
 
-                Log.d("UI", "${LogSource.UI} MainScreenContainer - offline")
+                Log.d(LogSource.INTERFACE, "${LogSource.UI} MainScreenContainer - offline")
             }
         }
 
@@ -103,11 +103,11 @@ fun MainScreenContainer(viewModel: MainScreenViewModel) {
                     if (isListEmpty) {
                         ErrorWindow(
                             text = stringResource(R.string.empty_list_message),
-                            isError = false,
+                            errorType = ErrorType.DATA,
                             onDismiss = {
                                 viewModel.clearFilter()
 
-                                Log.d("UI", "${LogSource.UI} MainScreenContainer - clear filter")
+                                Log.d(LogSource.INTERFACE, "${LogSource.UI} MainScreenContainer - clear filter")
                             }
                         )
                     }

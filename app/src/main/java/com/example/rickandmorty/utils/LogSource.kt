@@ -6,4 +6,6 @@ object LogSource {
     const val DATABASE = "🗂️DATABASE ->"
     const val REPOSITORY = "🔁REPOSITORY ->"
     const val UI = "📱UI ->"
+
+    const val INTERFACE = "INTERFACE"
 }

@@ -29,20 +29,43 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rickandmorty.R
+import com.example.rickandmorty.utils.ErrorType
 
 @Composable
 fun ErrorWindow(
     modifier: Modifier = Modifier,
     text: String = "",
-    isError: Boolean = true,
+    errorType: ErrorType = ErrorType.NETWORK,
     onDismiss: () -> Unit = {}
 ) {
+
     BoxWithConstraints(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         val boxWidth = maxWidth * 0.8f
         val boxHeight = maxHeight * 0.4f
+
+        val (
+            buttonText,
+            buttonColor,
+            colorMessage
+        ) = when(errorType) {
+            ErrorType.NETWORK -> {
+                Triple(
+                    stringResource(R.string.close),
+                    colorResource(R.color.black),
+                    colorResource(R.color.error_message)
+                )
+            }
+            ErrorType.DATA -> {
+                Triple(
+                    stringResource(R.string.close_filter),
+                    colorResource(R.color.green_circle),
+                    colorResource(R.color.black)
+                )
+            }
+        }
 
         Surface(
             modifier = Modifier
@@ -69,9 +92,8 @@ fun ErrorWindow(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = if(isError) "${stringResource(R.string.error)}: $text" else text,
-                    color = if(isError) colorResource(id = R.color.error_message)
-                    else colorResource(R.color.black)
+                    text = text,
+                    color = colorMessage
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -81,12 +103,12 @@ fun ErrorWindow(
                         .fillMaxWidth()
                         .height(48.dp)
                         .clip(RoundedCornerShape(8.dp))
-                        .background(colorResource(R.color.black))
+                        .background(buttonColor)
                         .clickable { onDismiss() },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = stringResource(R.string.close),
+                        text = buttonText,
                         color = Color.White
                     )
                 }
@@ -107,7 +129,7 @@ fun ErrorWindowPreview() {
     ) {
         ErrorWindow(
             text = "Hello",
-            isError = false
+            errorType = ErrorType.DATA
         )
     }
 }
