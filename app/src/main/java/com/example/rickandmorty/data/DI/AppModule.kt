@@ -56,6 +56,7 @@ class AppModule {
             AppDatabase::class.java,
             "rick_and_morty_db"
         )
+            .fallbackToDestructiveMigration(true)
             .build()
     }
 

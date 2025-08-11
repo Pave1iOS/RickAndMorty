@@ -54,6 +54,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("androidx.compose.foundation:foundation:1.5.0")
     implementation ("com.google.accompanist:accompanist-swiperefresh:0.24.13-rc")
+    implementation("androidx.navigation:navigation-compose:2.9.3")
 
     //Coroutine
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")

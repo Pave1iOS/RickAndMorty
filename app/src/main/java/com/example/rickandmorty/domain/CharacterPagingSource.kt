@@ -53,7 +53,13 @@ class CharacterPagingSource @Inject constructor(
                             status = it.status,
                             gender = it.gender,
                             species = it.species,
-                            image = it.image
+                            type = it.type,
+                            origin = it.origin,
+                            location = it.location,
+                            image = it.image,
+                            episode = it.episode,
+                            url = it.url,
+                            created = it.created
                         )
                     }
 
@@ -82,9 +88,16 @@ class CharacterPagingSource @Inject constructor(
                             status = it.status,
                             gender = it.gender,
                             species = it.species,
-                            image = it.image
+                            type = it.type,
+                            origin = it.origin,
+                            location = it.location,
+                            image = it.image,
+                            episode = it.episode,
+                            url = it.url,
+                            created = it.created
                         )
                     }
+
                 }
 
                 else -> emptyList()

@@ -18,6 +18,11 @@ class NetworkRepository @Inject constructor(
     private val database: AppDatabase
 ) {
 
+    suspend fun fetchCharacterById(id: Int): RickAndMortyCharacter {
+        Log.i(TAG, "${LogSource.NETWORK} fetching character with id = $id")
+        return api.getCharacterById(id)
+    }
+
     fun fetchCharacters(): Flow<PagingData<RickAndMortyCharacter>> {
 
         Log.i(TAG, "${LogSource.NETWORK} fetching all characters")

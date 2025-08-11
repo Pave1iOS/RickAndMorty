@@ -8,6 +8,10 @@ import androidx.room.Query
 @Dao
 interface RickAndMortyDao {
 
+    @Query("SELECT * FROM characters WHERE id = :id LIMIT 1")
+    suspend fun getCharacterById(id: Int): RickAndMortyEntity?
+
+
     @Query(""" 
         SELECT * FROM characters 
         WHERE (:status IS NULL OR status = :status) 

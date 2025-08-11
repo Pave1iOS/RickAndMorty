@@ -9,12 +9,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.rickandmorty.App
-import com.example.rickandmorty.data.api.RickAndMortyCharacter
-import com.example.rickandmorty.data.api.params.CharacterGender
-import com.example.rickandmorty.data.api.params.CharacterStatus
+import com.example.rickandmorty.presentation.composables.AppNavHost
 import com.example.rickandmorty.theme.RickAndMortyTheme
-import com.example.rickandmorty.utils.NetworkMonitor
-import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
+import com.example.rickandmorty.utils.FakeData
+import com.example.rickandmorty.utils.FakeData.rememberFakeLazyPagingItems
 import javax.inject.Inject
 
 class MainScreen : ComponentActivity() {
@@ -44,14 +42,7 @@ class MainScreen : ComponentActivity() {
 fun MainScreenPreview() {
 
     val fakeList = List(6) {
-        RickAndMortyCharacter(
-            id = 1,
-            name = "Character $it",
-            status = CharacterStatus.ALIVE,
-            species = "Human",
-            gender = CharacterGender.UNKNOWN,
-            image = ""
-        )
+        FakeData.CHARACTER
     }
 
     val pagingItems = rememberFakeLazyPagingItems(fakeList)

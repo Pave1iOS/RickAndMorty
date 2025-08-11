@@ -27,17 +27,30 @@ data class Info(
 )
 
 @Serializable
-data class RickAndMortyCharacter(
-    @SerialName("id")
-    val id: Int,
-    @SerialName("name")
+data class Origin(
     val name: String,
-    @SerialName("species")
-    val species: String,
-    @SerialName("status")
-    val status: CharacterStatus,
-    @SerialName("gender")
-    val gender: CharacterGender,
-    @SerialName("image")
-    val image: String
+    val url: String
 )
+
+@Serializable
+data class Location(
+    val name: String,
+    val url: String
+)
+
+@Serializable
+data class RickAndMortyCharacter(
+    val id: Int,
+    val name: String,
+    val status: CharacterStatus,
+    val gender: CharacterGender,
+    val species: String,
+    val type: String,
+    val origin: Origin,
+    val location: Location,
+    val image: String,
+    val episode: List<String>,
+    val url: String,
+    val created: String
+)
+

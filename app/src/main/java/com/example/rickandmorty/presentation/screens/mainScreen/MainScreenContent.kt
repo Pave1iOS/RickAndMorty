@@ -30,7 +30,8 @@ import com.example.rickandmorty.presentation.composables.sections.CharacterFilte
 import com.example.rickandmorty.presentation.composables.sections.CharactersGridScreen
 import com.example.rickandmorty.presentation.composables.sections.SearchBar
 import com.example.rickandmorty.theme.RickAndMortyTheme
-import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
+import com.example.rickandmorty.utils.FakeData
+import com.example.rickandmorty.utils.FakeData.rememberFakeLazyPagingItems
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
@@ -41,7 +42,8 @@ fun MainScreenContent(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
     onFilterChange: (CharacterStatus?, CharacterGender?) -> Unit,
-    isRefreshing: Boolean = false
+    isRefreshing: Boolean = false,
+    onClick: (Int) -> Unit = {}
 ) {
     var showFilter by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
@@ -105,7 +107,8 @@ fun MainScreenContent(
                         CharactersGridScreen(
                             modifier = Modifier.fillMaxWidth(),
                             rickAndMortyCharacters = rickAndMortyCharacters,
-                            gridState = gridState
+                            gridState = gridState,
+                            onClick = onClick
                         )
                     }
                 }
@@ -128,14 +131,7 @@ fun MainScreenContent(
 fun MainScreenContentPreview() {
 
     val fakeList = List(6) {
-        RickAndMortyCharacter(
-            id = 1,
-            name = "Character $it",
-            status = CharacterStatus.ALIVE,
-            species = "Human",
-            gender = CharacterGender.UNKNOWN,
-            image = ""
-        )
+        FakeData.CHARACTER
     }
 
     val pagingItems = rememberFakeLazyPagingItems(fakeList)

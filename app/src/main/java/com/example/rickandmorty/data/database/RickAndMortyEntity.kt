@@ -2,6 +2,8 @@ package com.example.rickandmorty.data.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.rickandmorty.data.api.Location
+import com.example.rickandmorty.data.api.Origin
 import com.example.rickandmorty.data.api.params.CharacterGender
 import com.example.rickandmorty.data.api.params.CharacterStatus
 
@@ -10,7 +12,13 @@ data class RickAndMortyEntity(
     @PrimaryKey val id: Int,
     val name: String,
     val species: String,
+    val type: String,
     val status: CharacterStatus,
     val gender: CharacterGender,
-    val image: String
+    val origin: Origin,
+    val location: Location,
+    val image: String,
+    val episode: List<String>,
+    val url: String,
+    val created: String
 )

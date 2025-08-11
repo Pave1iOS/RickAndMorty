@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.rickandmorty.presentation.screens.mainScreen.MainScreenViewModel
 import com.example.rickandmorty.domain.ViewModelFactory
+import com.example.rickandmorty.presentation.screens.detailScreen.CharacterDetailsViewModel
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
@@ -20,6 +21,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MainScreenViewModel::class)
     abstract fun bindFirstActivityViewModel(viewModel: MainScreenViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CharacterDetailsViewModel::class)
+    abstract fun bindCharacterDetailsViewModel(viewModel: CharacterDetailsViewModel): ViewModel
 }
 
 @MustBeDocumented

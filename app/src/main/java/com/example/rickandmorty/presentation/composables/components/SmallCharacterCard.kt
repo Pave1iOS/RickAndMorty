@@ -1,6 +1,7 @@
 package com.example.rickandmorty.presentation.composables.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -27,19 +28,20 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.rickandmorty.R
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
-import com.example.rickandmorty.data.api.params.CharacterGender
-import com.example.rickandmorty.data.api.params.CharacterStatus
+import com.example.rickandmorty.utils.FakeData
 
 @Composable
 fun SmallCharacterCard(
     modifier: Modifier = Modifier,
-    rickAndMortyCharacter: RickAndMortyCharacter
+    rickAndMortyCharacter: RickAndMortyCharacter,
+    onClick: (Int) -> Unit = {}
 ) {
 
     Card(
         modifier = modifier
             .fillMaxWidth()
             .height(300.dp)
+            .clickable { onClick(rickAndMortyCharacter.id) }
     ) {
 
         Box(
@@ -106,20 +108,11 @@ fun SmallCharacterCard(
 @Composable
 fun SmallCharacterCardPreview() {
 
-    val fakeRickAndMortyCharacter = RickAndMortyCharacter(
-        id = 1,
-        "Name",
-        "Species",
-        CharacterStatus.UNKNOWN,
-        CharacterGender.GENDERLESS,
-        "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
-    )
-
     Box(
         modifier = Modifier
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        SmallCharacterCard(rickAndMortyCharacter = fakeRickAndMortyCharacter)
+        SmallCharacterCard(rickAndMortyCharacter = FakeData.CHARACTER)
     }
 }

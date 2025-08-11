@@ -13,16 +13,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
-import com.example.rickandmorty.data.api.params.CharacterGender
 import com.example.rickandmorty.presentation.composables.components.SmallCharacterCard
-import com.example.rickandmorty.data.api.params.CharacterStatus
-import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
+import com.example.rickandmorty.utils.FakeData
+import com.example.rickandmorty.utils.FakeData.rememberFakeLazyPagingItems
 
 @Composable
 fun CharactersGridScreen(
     modifier: Modifier = Modifier,
     rickAndMortyCharacters: LazyPagingItems<RickAndMortyCharacter>,
-    gridState: LazyGridState = LazyGridState()
+    gridState: LazyGridState = LazyGridState(),
+    onClick: (Int) -> Unit = {}
 ) {
     LazyVerticalGrid(
         modifier = modifier
@@ -35,7 +35,10 @@ fun CharactersGridScreen(
         items(rickAndMortyCharacters.itemCount) {
             val character = rickAndMortyCharacters[it]
             if (character != null)
-                SmallCharacterCard(rickAndMortyCharacter = character)
+                SmallCharacterCard(
+                    rickAndMortyCharacter = character,
+                    onClick = onClick
+                )
         }
     }
 }
@@ -45,14 +48,7 @@ fun CharactersGridScreen(
 @Composable
 fun CharactersGridScreenPreview() {
 
-    val fakeRickAndMortyCharacter = RickAndMortyCharacter(
-        id = 1,
-        name = "Name",
-        species = "Species",
-        status = CharacterStatus.ALIVE,
-        gender = CharacterGender.MALE,
-        image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
-    )
+    val fakeRickAndMortyCharacter = FakeData.CHARACTER
 
     val charactersList = List(10) { index ->
         fakeRickAndMortyCharacter.copy(

@@ -1,10 +1,8 @@
 package com.example.rickandmorty.presentation.screens.mainScreen
 
 import MainScreenContent
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
@@ -25,19 +23,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.rickandmorty.R
-import com.example.rickandmorty.data.api.RickAndMortyCharacter
-import com.example.rickandmorty.data.api.params.CharacterGender
-import com.example.rickandmorty.data.api.params.CharacterStatus
 import com.example.rickandmorty.presentation.composables.components.ErrorWindowDialog
 import com.example.rickandmorty.presentation.composables.components.LoadIndicator
 import com.example.rickandmorty.theme.RickAndMortyTheme
 import com.example.rickandmorty.utils.ErrorType
-import com.example.rickandmorty.utils.LogSource
+import com.example.rickandmorty.utils.FakeData
+import com.example.rickandmorty.utils.FakeData.rememberFakeLazyPagingItems
 import com.example.rickandmorty.utils.NetworkMonitor
-import com.example.rickandmorty.utils.rememberFakeLazyPagingItems
 
 @Composable
-fun MainScreenContainer(viewModel: MainScreenViewModel) {
+fun MainScreenContainer(
+    viewModel: MainScreenViewModel,
+    onClick: (Int) -> Unit = {}
+) {
     val searchQuery by viewModel.searchQuery.collectAsState()
     val networkStatus by viewModel.networkStatus.collectAsState()
     val characters = viewModel.characters.collectAsLazyPagingItems()
@@ -110,7 +108,8 @@ fun MainScreenContainer(viewModel: MainScreenViewModel) {
                         onFilterChange = { status, gender ->
                             viewModel.setFilters(status, gender)
                         },
-                        isRefreshing = isRefreshing
+                        isRefreshing = isRefreshing,
+                        onClick = onClick
                     )
                 }
             }
@@ -141,14 +140,7 @@ fun MainScreenContainer(viewModel: MainScreenViewModel) {
 @Composable
 fun MainScreenContainerPreview() {
     val fakeList = List(6) {
-        RickAndMortyCharacter(
-            id = it,
-            name = "Character $it",
-            status = CharacterStatus.ALIVE,
-            species = "Human",
-            gender = CharacterGender.UNKNOWN,
-            image = ""
-        )
+        FakeData.CHARACTER
     }
 
     val pagingItems = rememberFakeLazyPagingItems(fakeList)
