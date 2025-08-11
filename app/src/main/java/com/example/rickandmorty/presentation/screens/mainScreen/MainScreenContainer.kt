@@ -49,40 +49,37 @@ fun MainScreenContainer(viewModel: MainScreenViewModel) {
     val onlineMessage = stringResource(R.string.online_message)
     val offlineMessage = stringResource(R.string.offline_message)
 
-    // Отслеживаем восстановление соединения
-    LaunchedEffect(networkStatus) {
+    val isFullReload = characters.loadState.refresh is LoadState.Loading && characters.itemCount == 0
+    val isRefreshing = characters.loadState.refresh is LoadState.Loading && characters.itemCount > 0
+    val isAppending = characters.loadState.append is LoadState.Loading
+    val isError = characters.loadState.refresh is LoadState.Error
 
+    var wasLoading by remember { mutableStateOf(false) }
+    val isListEmptyAfterLoad = characters.loadState.refresh is LoadState.NotLoading &&
+            characters.itemCount == 0 &&
+            !wasLoading
+
+    LaunchedEffect(characters.loadState.refresh) {
+        wasLoading = characters.loadState.refresh is LoadState.Loading
+    }
+
+    LaunchedEffect(networkStatus) {
         when {
             lastStatus == NetworkMonitor.NetworkStatus.OFFLINE &&
                     networkStatus == NetworkMonitor.NetworkStatus.ONLINE -> {
                 scaffoldState.snackbarHostState.showSnackbar(onlineMessage)
-
                 characters.refresh()
-
-                Log.d(
-                    LogSource.INTERFACE,
-                    "${LogSource.UI} MainScreenContainer - online -> characters refresh"
-                )
             }
-
             lastStatus == NetworkMonitor.NetworkStatus.ONLINE &&
                     networkStatus == NetworkMonitor.NetworkStatus.OFFLINE -> {
                 scaffoldState.snackbarHostState.showSnackbar(offlineMessage)
-
-                Log.d(LogSource.INTERFACE, "${LogSource.UI} MainScreenContainer - offline")
             }
         }
-
         lastStatus = networkStatus
     }
 
-    val isAppending = characters.loadState.append is LoadState.Loading
-    val isError = characters.loadState.refresh is LoadState.Error
-    val isListEmpty = characters.loadState.refresh is LoadState.NotLoading &&
-            characters.itemCount == 0
-
-    LaunchedEffect(isError, isListEmpty) {
-        if ((isError || isListEmpty) && !showError) {
+    LaunchedEffect(isError, isListEmptyAfterLoad) {
+        if ((isError || isListEmptyAfterLoad) && !showError) {
             showError = true
         }
     }
@@ -98,12 +95,10 @@ fun MainScreenContainer(viewModel: MainScreenViewModel) {
                 .background(colorResource(R.color.backgraund))
         ) {
             when {
-                isError -> {
-                    val error = characters.loadState.refresh as LoadState.Error
-
-                    Log.d(
-                        LogSource.INTERFACE,
-                        "${LogSource.UI} MainScreenContainer - clear filter"
+                isFullReload -> {
+                    LoadIndicator(
+                        modifier = Modifier
+                            .align(Alignment.Center)
                     )
                 }
 
@@ -114,15 +109,9 @@ fun MainScreenContainer(viewModel: MainScreenViewModel) {
                         onSearchQueryChange = { viewModel.setSearchQuery(it) },
                         onFilterChange = { status, gender ->
                             viewModel.setFilters(status, gender)
-                        }
+                        },
+                        isRefreshing = isRefreshing
                     )
-
-                    if (isListEmpty) {
-                        Log.d(
-                            LogSource.INTERFACE,
-                            "${LogSource.UI} MainScreenContainer - clear filter"
-                        )
-                    }
                 }
             }
 
@@ -139,15 +128,14 @@ fun MainScreenContainer(viewModel: MainScreenViewModel) {
                     errorType = ErrorType.DATA,
                     onAction = {
                         viewModel.clearFilter()
-
                         showError = false
                     }
                 )
             }
         }
-
     }
 }
+
 
 @Preview
 @Composable

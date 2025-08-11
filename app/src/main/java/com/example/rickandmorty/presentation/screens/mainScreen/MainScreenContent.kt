@@ -40,7 +40,8 @@ fun MainScreenContent(
     rickAndMortyCharacters: LazyPagingItems<RickAndMortyCharacter>,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
-    onFilterChange: (CharacterStatus?, CharacterGender?) -> Unit
+    onFilterChange: (CharacterStatus?, CharacterGender?) -> Unit,
+    isRefreshing: Boolean = false
 ) {
     var showFilter by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
@@ -88,9 +89,7 @@ fun MainScreenContent(
                     }
                 } else {
                     SwipeRefresh(
-                        state = rememberSwipeRefreshState(
-                            rickAndMortyCharacters.loadState.refresh is LoadState.Loading
-                        ),
+                        state = rememberSwipeRefreshState(isRefreshing),
                         onRefresh = { coroutineScope.launch { rickAndMortyCharacters.refresh() } },
                         indicator = { state, _ ->
                             Box(
