@@ -1,20 +1,21 @@
 package com.example.rickandmorty.presentation.composables.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,35 +23,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.example.rickandmorty.R
 import com.example.rickandmorty.utils.ErrorType
+import com.example.rickandmorty.utils.LogSource
 
 @Composable
-fun ErrorWindow(
-    modifier: Modifier = Modifier,
-    text: String = "",
+fun ErrorWindowDialog(
+    text: String,
     errorType: ErrorType = ErrorType.NETWORK,
-    onDismiss: () -> Unit = {}
+    onAction: () -> Unit,
+    onClose: () -> Unit = {}
 ) {
-
-    BoxWithConstraints(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        val boxWidth = maxWidth * 0.8f
-        val boxHeight = maxHeight * 0.4f
-
-        val (
-            buttonText,
-            buttonColor,
-            colorMessage
-        ) = when(errorType) {
+    Dialog(onDismissRequest = onAction) {
+        val (buttonText, buttonColor, colorMessage) = when (errorType) {
             ErrorType.NETWORK -> {
                 Triple(
                     stringResource(R.string.close),
@@ -68,23 +59,38 @@ fun ErrorWindow(
         }
 
         Surface(
-            modifier = Modifier
-                .size(boxWidth, boxHeight),
             shape = RoundedCornerShape(16.dp),
             color = Color(0xFFFAFAFA),
             shadowElevation = 8.dp
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .background(Color.White)
                     .padding(16.dp),
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.TopEnd
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = stringResource(R.string.close),
+                        tint = colorResource(R.color.black),
+                        modifier = Modifier
+                            .size(35.dp)
+                            .clickable {
+                                onClose()
+                                Log.d(LogSource.INTERFACE, "ErrorWindowDialog - dialog close (exit)")
+                            }
+                    )
+                }
 
                 Image(
                     modifier = Modifier
-                        .size(boxWidth * 0.4f, boxHeight * 0.4f),
+                        .size(150.dp),
                     painter = painterResource(R.drawable.sad_morty),
                     contentDescription = stringResource(R.string.sad_morty, text),
                 )
@@ -104,7 +110,10 @@ fun ErrorWindow(
                         .height(48.dp)
                         .clip(RoundedCornerShape(8.dp))
                         .background(buttonColor)
-                        .clickable { onDismiss() },
+                        .clickable {
+                            onAction()
+                            Log.d(LogSource.INTERFACE, "ErrorWindowDialog - dialog close (button)")
+                         },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -118,18 +127,20 @@ fun ErrorWindow(
 }
 
 
+
 @Preview
 @Composable
 fun ErrorWindowPreview() {
-    Box(
-        modifier = Modifier
-            .background(Color.Blue)
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        ErrorWindow(
-            text = "Hello",
-            errorType = ErrorType.DATA
-        )
-    }
+
+        Dialog(
+            onDismissRequest = {  }
+        ) {
+
+            ErrorWindowDialog(
+                text = "Hello",
+                errorType = ErrorType.DATA,
+                onAction = {}
+            )
+        }
+
 }

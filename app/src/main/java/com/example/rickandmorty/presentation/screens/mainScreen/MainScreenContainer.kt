@@ -25,7 +25,7 @@ import com.example.rickandmorty.R
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.data.api.params.CharacterGender
 import com.example.rickandmorty.data.api.params.CharacterStatus
-import com.example.rickandmorty.presentation.composables.components.ErrorWindow
+import com.example.rickandmorty.presentation.composables.components.ErrorWindowDialog
 import com.example.rickandmorty.presentation.composables.components.LoadIndicator
 import com.example.rickandmorty.theme.RickAndMortyTheme
 import com.example.rickandmorty.utils.ErrorType
@@ -41,6 +41,7 @@ fun MainScreenContainer(viewModel: MainScreenViewModel) {
 
     val scaffoldState = rememberScaffoldState()
     var lastStatus by remember { mutableStateOf(networkStatus) }
+    var showError by remember { mutableStateOf(false) }
 
     val onlineMessage = stringResource(R.string.online_message)
     val offlineMessage = stringResource(R.string.offline_message)
@@ -73,6 +74,12 @@ fun MainScreenContainer(viewModel: MainScreenViewModel) {
     val isListEmpty = characters.loadState.refresh is LoadState.NotLoading &&
             characters.itemCount == 0
 
+    LaunchedEffect(isError, isListEmpty) {
+        if ((isError || isListEmpty) && !showError) {
+            showError = true
+        }
+    }
+
     Scaffold(
         scaffoldState = scaffoldState,
         snackbarHost = { SnackbarHost(it) }
@@ -86,15 +93,7 @@ fun MainScreenContainer(viewModel: MainScreenViewModel) {
                 isError -> {
                     val error = characters.loadState.refresh as LoadState.Error
 
-                    ErrorWindow(
-                        text = stringResource(R.string.empty_list_message),
-                        errorType = ErrorType.DATA,
-                        onDismiss = {
-                            viewModel.clearFilter()
-
-                            Log.d(LogSource.INTERFACE, "${LogSource.UI} MainScreenContainer - clear filter")
-                        }
-                    )
+                    Log.d(LogSource.INTERFACE, "${LogSource.UI} MainScreenContainer - clear filter")
                 }
                 else -> {
                     MainScreenContent(
@@ -107,15 +106,8 @@ fun MainScreenContainer(viewModel: MainScreenViewModel) {
                     )
 
                     if (isListEmpty) {
-                        ErrorWindow(
-                            text = stringResource(R.string.empty_list_message),
-                            errorType = ErrorType.DATA,
-                            onDismiss = {
-                                viewModel.clearFilter()
 
-                                Log.d(LogSource.INTERFACE, "${LogSource.UI} MainScreenContainer - clear filter")
-                            }
-                        )
+                        Log.d(LogSource.INTERFACE, "${LogSource.UI} MainScreenContainer - clear filter")
                     }
                 }
             }
@@ -124,6 +116,21 @@ fun MainScreenContainer(viewModel: MainScreenViewModel) {
                 LoadIndicator(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
+                )
+            }
+
+            if (showError) {
+                ErrorWindowDialog(
+                    text = stringResource(R.string.empty_list_message),
+                    errorType = ErrorType.DATA,
+                    onAction = {
+                        viewModel.clearFilter()
+
+                        showError = false
+                    },
+                    onClose = {
+                        showError = false
+                    }
                 )
             }
         }
