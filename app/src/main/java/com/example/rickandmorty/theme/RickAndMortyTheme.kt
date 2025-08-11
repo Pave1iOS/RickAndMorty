@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -17,6 +19,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.unit.dp
 import com.example.rickandmorty.R
 
 @Composable
@@ -41,16 +44,11 @@ fun RickAndMortyTheme(content: @Composable () -> Unit) {
                 color = MaterialTheme.colorScheme.background
             ) {
 
-                Spacer(
-                    modifier = Modifier
-                        .windowInsetsTopHeight(WindowInsets.statusBars)
-                        .background(MaterialTheme.colorScheme.background)
-                )
-
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(WindowInsets.statusBars.asPaddingValues())
+                        .statusBarsPadding()
+                        .offset(y = (-2).dp)
                 ) {
                     content()
                 }

@@ -38,7 +38,6 @@ fun ErrorWindowDialog(
     text: String,
     errorType: ErrorType = ErrorType.NETWORK,
     onAction: () -> Unit,
-    onClose: () -> Unit = {}
 ) {
     Dialog(onDismissRequest = onAction) {
         val (buttonText, buttonColor, colorMessage) = when (errorType) {
@@ -70,23 +69,6 @@ fun ErrorWindowDialog(
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.TopEnd
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = stringResource(R.string.close),
-                        tint = colorResource(R.color.black),
-                        modifier = Modifier
-                            .size(35.dp)
-                            .clickable {
-                                onClose()
-                                Log.d(LogSource.INTERFACE, "ErrorWindowDialog - dialog close (exit)")
-                            }
-                    )
-                }
 
                 Image(
                     modifier = Modifier

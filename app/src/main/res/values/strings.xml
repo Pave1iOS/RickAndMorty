@@ -15,6 +15,7 @@
     <string name="offline_message">Соединение с интернетом прервано 🥲</string>
     <string name="online_message">Соединение с интернетом восстановленно 🚀</string>
     <string name="empty_list_message">Список персонажей пуст 🥲</string>
+    <string name="refresh">Обновить</string>
 
 <!-- descriptions -->
     <string name="icon_search">Иконка поиска</string>
