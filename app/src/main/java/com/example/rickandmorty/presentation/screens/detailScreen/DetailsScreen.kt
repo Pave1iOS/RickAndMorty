@@ -117,7 +117,7 @@ fun DetailsScreen(
                             ) {
                                 PropertySection(text = "Origin: ${char.origin.name}")
                                 PropertySection(text = "Location: ${char.location.name}")
-                                PropertySection(text = "Episodes: ${char.episode.size}")
+                                PropertySection(text = "Episodes: ${char.episode.size} серий(я)")
                             }
                         }
                     }
