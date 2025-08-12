@@ -31,9 +31,9 @@ import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.utils.FakeData
 
 @Composable
-fun SmallCharacterCard(
+fun CharacterCard(
     modifier: Modifier = Modifier,
-    rickAndMortyCharacter: RickAndMortyCharacter,
+    character: RickAndMortyCharacter,
     onClick: (Int) -> Unit = {}
 ) {
 
@@ -41,7 +41,7 @@ fun SmallCharacterCard(
         modifier = modifier
             .fillMaxWidth()
             .height(300.dp)
-            .clickable { onClick(rickAndMortyCharacter.id) }
+            .clickable { onClick(character.id) }
     ) {
 
         Box(
@@ -55,8 +55,8 @@ fun SmallCharacterCard(
                     .fillMaxSize()
                     .background(Color.Yellow)
                     .clip(RoundedCornerShape(8.dp)),
-                model = rickAndMortyCharacter.image,
-                contentDescription = stringResource(R.string.character_image, rickAndMortyCharacter.name),
+                model = character.image,
+                contentDescription = stringResource(R.string.character_image, character.name),
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(R.drawable.placeholder)
             )
@@ -64,7 +64,7 @@ fun SmallCharacterCard(
             StatusComponent(
                 modifier = Modifier
                     .align(Alignment.BottomEnd),
-                character = rickAndMortyCharacter
+                character = character
             )
         }
 
@@ -80,7 +80,7 @@ fun SmallCharacterCard(
             ) {
                 Text(
                     textAlign = TextAlign.Center,
-                    text = rickAndMortyCharacter.name,
+                    text = character.name,
                     style = MaterialTheme.typography.titleMedium,
                     color = colorResource(R.color.text_name)
                 )
@@ -92,7 +92,7 @@ fun SmallCharacterCard(
 
                 Text(
                     textAlign = TextAlign.Center,
-                    text = "${rickAndMortyCharacter.gender.displayName} | ${rickAndMortyCharacter.species}",
+                    text = "${character.gender.displayName} | ${character.species}",
                     style = MaterialTheme.typography.bodySmall,
                     color = colorResource(R.color.text_secondary)
                 )
@@ -113,6 +113,6 @@ fun SmallCharacterCardPreview() {
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        SmallCharacterCard(rickAndMortyCharacter = FakeData.CHARACTER)
+        CharacterCard(character = FakeData.CHARACTER)
     }
 }

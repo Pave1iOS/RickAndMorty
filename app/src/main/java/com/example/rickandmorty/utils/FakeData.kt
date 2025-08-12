@@ -7,8 +7,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.rickandmorty.data.api.Location
 import com.example.rickandmorty.data.api.Origin
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
-import com.example.rickandmorty.data.api.params.CharacterGender
-import com.example.rickandmorty.data.api.params.CharacterStatus
+import com.example.rickandmorty.data.api.params.GenderFilter
+import com.example.rickandmorty.data.api.params.StatusFilter
 import kotlinx.coroutines.flow.flowOf
 
 object FakeData {
@@ -17,8 +17,8 @@ object FakeData {
         id = 1,
         name = "Name",
         species = "Species",
-        status = CharacterStatus.UNKNOWN,
-        gender = CharacterGender.GENDERLESS,
+        status = StatusFilter.UNKNOWN,
+        gender = GenderFilter.GENDERLESS,
         image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
         type = "",
         origin = Origin("", ""),

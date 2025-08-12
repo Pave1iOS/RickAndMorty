@@ -13,9 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,9 +34,9 @@ import com.example.rickandmorty.utils.LogSource
 fun ErrorWindowDialog(
     text: String,
     errorType: ErrorType = ErrorType.NETWORK,
-    onAction: () -> Unit,
+    onClick: () -> Unit,
 ) {
-    Dialog(onDismissRequest = onAction) {
+    Dialog(onDismissRequest = onClick) {
         val (buttonText, buttonColor, colorMessage) = when (errorType) {
             ErrorType.NETWORK -> {
                 Triple(
@@ -93,7 +90,7 @@ fun ErrorWindowDialog(
                         .clip(RoundedCornerShape(8.dp))
                         .background(buttonColor)
                         .clickable {
-                            onAction()
+                            onClick()
                             Log.d(LogSource.INTERFACE, "ErrorWindowDialog - dialog close (button)")
                          },
                     contentAlignment = Alignment.Center
@@ -121,7 +118,7 @@ fun ErrorWindowPreview() {
             ErrorWindowDialog(
                 text = "Hello",
                 errorType = ErrorType.DATA,
-                onAction = {}
+                onClick = {}
             )
         }
 

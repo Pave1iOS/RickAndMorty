@@ -31,15 +31,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rickandmorty.R
-import com.example.rickandmorty.data.api.params.CharacterGender
-import com.example.rickandmorty.data.api.params.CharacterStatus
+import com.example.rickandmorty.data.api.params.GenderFilter
+import com.example.rickandmorty.data.api.params.StatusFilter
 
 @Composable
 fun CharacterFilterScreen(
-    onApplyFilter: (status: CharacterStatus?, gender: CharacterGender?) -> Unit
+    onApplyFilter: (status: StatusFilter?, gender: GenderFilter?) -> Unit
 ) {
-    var selectedStatus by remember { mutableStateOf<CharacterStatus?>(null) }
-    var selectedGender by remember { mutableStateOf<CharacterGender?>(null) }
+    var selectedStatus by remember { mutableStateOf<StatusFilter?>(null) }
+    var selectedGender by remember { mutableStateOf<GenderFilter?>(null) }
 
     val filtersSelected = selectedStatus != null || selectedGender != null
 
@@ -74,7 +74,7 @@ fun CharacterFilterScreen(
                         maxItemsInEachRow = 4,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        CharacterStatus.entries.forEach { status ->
+                        StatusFilter.entries.forEach { status ->
                             FilterChip(
                                 selected = selectedStatus == status,
                                 onClick = { selectedStatus = status },
@@ -96,7 +96,7 @@ fun CharacterFilterScreen(
                         maxItemsInEachRow = 4,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        CharacterGender.entries.forEach { gender ->
+                        GenderFilter.entries.forEach { gender ->
                             FilterChip(
                                 selected = selectedGender == gender,
                                 onClick = { selectedGender = gender },
@@ -115,6 +115,7 @@ fun CharacterFilterScreen(
                         .clickable {
                             if (filtersSelected) onApplyFilter(selectedStatus, selectedGender)
                             else onApplyFilter(null, null)
+
                         }
                 ) {
                     Text(

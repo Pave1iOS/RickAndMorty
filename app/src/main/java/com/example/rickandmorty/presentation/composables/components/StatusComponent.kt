@@ -25,11 +25,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rickandmorty.R
-import com.example.rickandmorty.data.api.Location
-import com.example.rickandmorty.data.api.Origin
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
-import com.example.rickandmorty.data.api.params.CharacterGender
-import com.example.rickandmorty.data.api.params.CharacterStatus
+import com.example.rickandmorty.data.api.params.StatusFilter
 import com.example.rickandmorty.utils.FakeData
 
 @Composable
@@ -71,8 +68,8 @@ fun StatusComponent(
 fun StatusComponentPreview() {
     val characters = listOf(
             FakeData.CHARACTER,
-            FakeData.CHARACTER.copy(id = 3, status = CharacterStatus.DEAD),
-            FakeData.CHARACTER.copy(id = 2, status = CharacterStatus.ALIVE)
+            FakeData.CHARACTER.copy(id = 3, status = StatusFilter.DEAD),
+            FakeData.CHARACTER.copy(id = 2, status = StatusFilter.ALIVE)
     )
     Column (
         modifier = Modifier

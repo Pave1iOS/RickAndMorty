@@ -1,7 +1,7 @@
 package com.example.rickandmorty.data.api
 
-import com.example.rickandmorty.data.api.params.CharacterGender
-import com.example.rickandmorty.data.api.params.CharacterStatus
+import com.example.rickandmorty.data.api.params.GenderFilter
+import com.example.rickandmorty.data.api.params.StatusFilter
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -42,8 +42,8 @@ data class Location(
 data class RickAndMortyCharacter(
     val id: Int,
     val name: String,
-    val status: CharacterStatus,
-    val gender: CharacterGender,
+    val status: StatusFilter,
+    val gender: GenderFilter,
     val species: String,
     val type: String,
     val origin: Origin,

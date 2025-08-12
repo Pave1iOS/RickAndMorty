@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class CharacterStatus(val colorResID: Int, val displayName: String) {
+enum class StatusFilter(val colorResID: Int, val displayName: String) {
 
     @SerialName("Alive")
     ALIVE(R.color.green_circle, "Alive"),

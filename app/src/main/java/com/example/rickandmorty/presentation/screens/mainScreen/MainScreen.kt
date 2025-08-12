@@ -1,140 +1,111 @@
+package com.example.rickandmorty.presentation.screens.mainScreen
+
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
-import com.example.rickandmorty.data.api.params.CharacterGender
-import com.example.rickandmorty.data.api.params.CharacterStatus
 import com.example.rickandmorty.presentation.composables.components.ButtonFilter
+import com.example.rickandmorty.presentation.composables.components.CharacterCard
 import com.example.rickandmorty.presentation.composables.components.LoadIndicator
-import com.example.rickandmorty.presentation.composables.components.RefreshIndicator
-import com.example.rickandmorty.presentation.composables.sections.CharacterFilterScreen
-import com.example.rickandmorty.presentation.composables.sections.CharactersGridScreen
 import com.example.rickandmorty.presentation.composables.sections.SearchBar
-import com.example.rickandmorty.theme.RickAndMortyTheme
 import com.example.rickandmorty.utils.FakeData
 import com.example.rickandmorty.utils.FakeData.rememberFakeLazyPagingItems
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(
-    rickAndMortyCharacters: LazyPagingItems<RickAndMortyCharacter>,
-    searchQuery: String,
-    onSearchQueryChange: (String) -> Unit,
-    onFilterChange: (CharacterStatus?, CharacterGender?) -> Unit,
-    isRefreshing: Boolean = false,
-    onClick: (Int) -> Unit = {}
+    characters: LazyPagingItems<RickAndMortyCharacter>,
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onClick: (Int) -> Unit,
+    onRefresh: () -> Unit,
+    isRefreshing: Boolean,
+    isAppending: Boolean,
+    onFilterClick: () -> Unit
 ) {
-    var showFilter by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
+
     val gridState = rememberLazyGridState()
 
-    // Скролл вверх при обновлении списка
-    LaunchedEffect(rickAndMortyCharacters.loadState.refresh) {
-        if (rickAndMortyCharacters.loadState.refresh is LoadState.NotLoading &&
-            rickAndMortyCharacters.itemCount > 0
-        ) {
-            gridState.scrollToItem(0)
-        }
-    }
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
 
-    val isFirstLoad = rickAndMortyCharacters.loadState.refresh is LoadState.Loading &&
-            rickAndMortyCharacters.itemCount == 0
-
-    Scaffold(
-        floatingActionButton = {
-            ButtonFilter(onClick = { showFilter = true })
-        }
-    ) { paddingValues ->
-
-        RickAndMortyTheme {
-            Column(
+            SearchBar(
+                query = query,
+                onQueryChange = onQueryChange,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .padding(10.dp)
+                    .padding(8.dp)
+            )
+
+            SwipeRefresh(
+                state = rememberSwipeRefreshState(isRefreshing),
+                onRefresh = onRefresh,
+                modifier = Modifier.weight(1f)
             ) {
-                SearchBar(
-                    modifier = Modifier.fillMaxWidth(),
-                    query = searchQuery,
-                    onQueryChange = onSearchQueryChange
-                )
-
-                Spacer(modifier = Modifier.size(10.dp))
-
-                if (isFirstLoad) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        LoadIndicator()
-                    }
-                } else {
-                    SwipeRefresh(
-                        state = rememberSwipeRefreshState(isRefreshing),
-                        onRefresh = { coroutineScope.launch { rickAndMortyCharacters.refresh() } },
-                        indicator = { state, _ ->
-                            Box(
-                                modifier = Modifier
-                                    .size(80.dp)
-                                    .padding(top = 12.dp),
-                                contentAlignment = Alignment.TopCenter
-                            ) {
-                                RefreshIndicator(isRefreshing = state.isRefreshing)
-                            }
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    state = gridState,
+                    verticalArrangement = Arrangement.spacedBy(6.dp),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                ) {
+                    items(characters.itemCount) { index ->
+                        val character = characters[index]
+                        if (character != null) {
+                            CharacterCard(
+                                character = character,
+                                onClick = { onClick(character.id) }
+                            )
                         }
-                    ) {
-                        CharactersGridScreen(
-                            modifier = Modifier.fillMaxWidth(),
-                            rickAndMortyCharacters = rickAndMortyCharacters,
-                            gridState = gridState,
-                            onClick = onClick
-                        )
+                    }
+
+                    if (isAppending) {
+                        item(span = { GridItemSpan(2) }) {
+                            LoadIndicator()
+                        }
                     }
                 }
             }
         }
 
-        if (showFilter) {
-            CharacterFilterScreen(
-                onApplyFilter = { status, gender ->
-                    onFilterChange(status, gender)
-                    showFilter = false
-                }
-            )
-        }
+        ButtonFilter(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp),
+            onClick = onFilterClick
+        )
     }
 }
 
 @Preview
 @Composable
-fun MainScreenContentPreview() {
+fun MainScreenPreview() {
 
-    val fakeList = List(6) {
-        FakeData.CHARACTER
+    val fakeRickAndMortyCharacter = FakeData.CHARACTER
+
+    val charactersList = List(10) { index ->
+        fakeRickAndMortyCharacter.copy(
+            name = "Name $index",
+            image = "https://rickandmortyapi.com/api/character/avatar/${index + 1}.jpeg"
+        )
     }
 
-    val pagingItems = rememberFakeLazyPagingItems(fakeList)
+    val pagingItems = rememberFakeLazyPagingItems(charactersList)
 
     Box(
         modifier = Modifier
@@ -142,10 +113,14 @@ fun MainScreenContentPreview() {
         contentAlignment = Alignment.Center
     ) {
         MainScreen(
-            rickAndMortyCharacters = pagingItems,
-            searchQuery = "",
-            onSearchQueryChange = {},
-            onFilterChange = { _, _ -> }
+            characters = pagingItems,
+            onClick = {},
+            onRefresh = {},
+            isRefreshing = false,
+            isAppending = false,
+            onFilterClick = {},
+            query = "",
+            onQueryChange = {}
         )
     }
 }

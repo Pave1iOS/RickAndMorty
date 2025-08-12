@@ -1,13 +1,11 @@
 package com.example.rickandmorty.presentation.composables
 
 import androidx.compose.runtime.*
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.*
 import androidx.navigation.navArgument
-import com.example.rickandmorty.App
 import com.example.rickandmorty.presentation.screens.detailScreen.DetailsScreen
 import com.example.rickandmorty.presentation.screens.detailScreen.DetailsViewModel
 import com.example.rickandmorty.presentation.screens.mainScreen.MainScreenContainer
@@ -22,9 +20,7 @@ fun AppNavHost(factory: ViewModelProvider.Factory) {
         startDestination = "main"
     ) {
         composable("main") {
-            val mainViewModel: MainViewModel = viewModel(factory = factory)
             MainScreenContainer(
-                viewModel = mainViewModel,
                 onClick = { id -> navController.navigate("details/$id") }
             )
         }

@@ -3,8 +3,8 @@ package com.example.rickandmorty.data.database
 import androidx.room.TypeConverter
 import com.example.rickandmorty.data.api.Location
 import com.example.rickandmorty.data.api.Origin
-import com.example.rickandmorty.data.api.params.CharacterGender
-import com.example.rickandmorty.data.api.params.CharacterStatus
+import com.example.rickandmorty.data.api.params.GenderFilter
+import com.example.rickandmorty.data.api.params.StatusFilter
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
@@ -14,16 +14,16 @@ class DatabaseConverters {
     private val json = Json { ignoreUnknownKeys = true }
 
     @TypeConverter
-    fun fromStatus(value: CharacterStatus): String = value.name
+    fun fromStatus(value: StatusFilter): String = value.name
 
     @TypeConverter
-    fun toStatus(value: String): CharacterStatus = CharacterStatus.valueOf(value)
+    fun toStatus(value: String): StatusFilter = StatusFilter.valueOf(value)
 
     @TypeConverter
-    fun fromGender(value: CharacterGender): String = value.name
+    fun fromGender(value: GenderFilter): String = value.name
 
     @TypeConverter
-    fun toGender(value: String): CharacterGender = CharacterGender.valueOf(value)
+    fun toGender(value: String): GenderFilter = GenderFilter.valueOf(value)
 
     @TypeConverter
     fun originToString(origin: Origin): String =

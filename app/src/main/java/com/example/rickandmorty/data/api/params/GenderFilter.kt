@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class CharacterGender(val displayName: String) {
+enum class GenderFilter(val displayName: String) {
 
     @SerialName("Female")
     FEMALE("Female"),

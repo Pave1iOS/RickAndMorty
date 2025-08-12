@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
-import com.example.rickandmorty.presentation.composables.components.SmallCharacterCard
+import com.example.rickandmorty.presentation.composables.components.CharacterCard
 import com.example.rickandmorty.utils.FakeData
 import com.example.rickandmorty.utils.FakeData.rememberFakeLazyPagingItems
 
@@ -35,8 +35,8 @@ fun CharactersGridScreen(
         items(rickAndMortyCharacters.itemCount) {
             val character = rickAndMortyCharacters[it]
             if (character != null)
-                SmallCharacterCard(
-                    rickAndMortyCharacter = character,
+                CharacterCard(
+                    character = character,
                     onClick = onClick
                 )
         }

@@ -1,161 +1,104 @@
 package com.example.rickandmorty.presentation.screens.mainScreen
 
-import MainScreen
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.paging.LoadState
+import androidx.compose.ui.window.Dialog
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.rickandmorty.R
 import com.example.rickandmorty.presentation.composables.components.ErrorWindowDialog
 import com.example.rickandmorty.presentation.composables.components.LoadIndicator
-import com.example.rickandmorty.theme.RickAndMortyTheme
-import com.example.rickandmorty.utils.ErrorType
-import com.example.rickandmorty.utils.FakeData
-import com.example.rickandmorty.utils.FakeData.rememberFakeLazyPagingItems
-import com.example.rickandmorty.utils.NetworkMonitor
+import com.example.rickandmorty.presentation.composables.sections.CharacterFilterScreen
+import com.example.rickandmorty.utils.*
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun MainScreenContainer(
-    viewModel: MainViewModel,
     onClick: (Int) -> Unit = {}
 ) {
-    val searchQuery by viewModel.searchQuery.collectAsState()
-    val networkStatus by viewModel.networkStatus.collectAsState()
+    val viewModel: MainViewModel = daggerViewModel()
+
     val characters = viewModel.characters.collectAsLazyPagingItems()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val query by viewModel._searchQuery.collectAsState()
+    val uiEvent by viewModel.uiEvent.collectAsState(initial = null)
 
-    val scaffoldState = rememberScaffoldState()
-    var lastStatus by remember { mutableStateOf(networkStatus) }
-    var showError by remember { mutableStateOf(false) }
+    var showFilter by remember { mutableStateOf(false) }
+    var loadIndicator by remember { mutableStateOf(true) }
 
-    val onlineMessage = stringResource(R.string.online_message)
-    val offlineMessage = stringResource(R.string.offline_message)
-
-    val isFullReload = characters.loadState.refresh is LoadState.Loading && characters.itemCount == 0
-    val isRefreshing = characters.loadState.refresh is LoadState.Loading && characters.itemCount > 0
-    val isAppending = characters.loadState.append is LoadState.Loading
-    val isError = characters.loadState.refresh is LoadState.Error
-
-    var wasLoading by remember { mutableStateOf(false) }
-    val isListEmptyAfterLoad = characters.loadState.refresh is LoadState.NotLoading &&
-            characters.itemCount == 0 &&
-            !wasLoading
-
-    LaunchedEffect(characters.loadState.refresh) {
-        wasLoading = characters.loadState.refresh is LoadState.Loading
-    }
-
-    LaunchedEffect(networkStatus) {
-        when {
-            lastStatus == NetworkMonitor.NetworkStatus.OFFLINE &&
-                    networkStatus == NetworkMonitor.NetworkStatus.ONLINE -> {
-                scaffoldState.snackbarHostState.showSnackbar(onlineMessage)
-                characters.refresh()
-            }
-            lastStatus == NetworkMonitor.NetworkStatus.ONLINE &&
-                    networkStatus == NetworkMonitor.NetworkStatus.OFFLINE -> {
-                scaffoldState.snackbarHostState.showSnackbar(offlineMessage)
+    uiEvent?.let { event ->
+        if (event is UiEvent.ShowMessage) {
+            val message = stringResource(id = event.messageRes)
+            LaunchedEffect(message) {
+                snackbarHostState.showSnackbar(message)
             }
         }
-        lastStatus = networkStatus
     }
 
-    LaunchedEffect(isError, isListEmptyAfterLoad) {
-        if ((isError || isListEmptyAfterLoad) && !showError) {
-            showError = true
+
+    LaunchedEffect(characters.isLoaded) {
+        if (characters.isLoaded) {
+            loadIndicator = false
         }
     }
 
     Scaffold(
-        scaffoldState = scaffoldState,
-        snackbarHost = { SnackbarHost(it) }
-    ) { paddingValues ->
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { padding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .background(colorResource(R.color.backgraund))
-        ) {
-            when {
-                isFullReload -> {
-                    LoadIndicator(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                    )
-                }
-
-                else -> {
-                    MainScreen(
-                        rickAndMortyCharacters = characters,
-                        searchQuery = searchQuery,
-                        onSearchQueryChange = { viewModel.setSearchQuery(it) },
-                        onFilterChange = { status, gender ->
-                            viewModel.setFilters(status, gender)
-                        },
-                        isRefreshing = isRefreshing,
-                        onClick = onClick
-                    )
-                }
-            }
-
-            if (isAppending) {
-                LoadIndicator(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                )
-            }
-
-            if (showError) {
-                ErrorWindowDialog(
-                    text = stringResource(R.string.empty_list_message),
-                    errorType = ErrorType.DATA,
-                    onAction = {
-                        viewModel.clearFilter()
-                        showError = false
-                    }
-                )
-            }
-        }
-    }
-}
-
-
-@Preview
-@Composable
-fun MainScreenContainerPreview() {
-    val fakeList = List(6) {
-        FakeData.CHARACTER
-    }
-
-    val pagingItems = rememberFakeLazyPagingItems(fakeList)
-
-    RickAndMortyTheme {
-        Box(
-            modifier = Modifier.fillMaxSize(),
+                .padding(padding),
             contentAlignment = Alignment.Center
         ) {
-            MainScreen(
-                rickAndMortyCharacters = pagingItems,
-                searchQuery = "",
-                onSearchQueryChange = {},
-                onFilterChange = { _, _ -> }
-            )
+            when {
+                characters.isFirstLoad -> LoadIndicator(
+                    isLoading = loadIndicator
+                )
+                characters.isError -> ErrorWindowDialog(
+                    text = "Ошибка загрузки данных",
+                    onClick = { characters.retry() }
+                )
+                characters.isEmptyAfterLoad -> ErrorWindowDialog(
+                    text = "Список пуст",
+                    onClick = {
+                        viewModel.setStatusFilter(null)
+                        viewModel.setGenderFilter(null)
+                    }
+                )
+                else -> MainScreen(
+                    characters = characters,
+                    query = query,
+                    onQueryChange = { viewModel.setSearchQuery(it) },
+                    onClick = onClick,
+                    onRefresh = { characters.refresh() },
+                    isRefreshing = characters.isFullReload,
+                    isAppending = characters.isAppending,
+                    onFilterClick = { showFilter = true }
+                )
+            }
+
+            if (showFilter) {
+                Dialog(onDismissRequest = { showFilter = false }) {
+                    CharacterFilterScreen { status, gender ->
+                        val params = FilterParams(status, gender, viewModel._searchQuery.value)
+
+                        if (params.isReset) {
+                            viewModel.resetFilters()
+                        } else {
+                            viewModel.setStatusFilter(status)
+                            viewModel.setGenderFilter(gender)
+                        }
+                        showFilter = false
+                    }
+                }
+            }
         }
     }
 }
+
