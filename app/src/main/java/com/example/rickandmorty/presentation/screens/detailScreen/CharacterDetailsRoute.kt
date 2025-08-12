@@ -8,7 +8,7 @@ import androidx.compose.runtime.getValue
 @Composable
 fun CharacterDetailsRoute(
     characterId: Int,
-    viewModel: CharacterDetailsViewModel,
+    viewModel: DetailsViewModel,
     onBack: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
@@ -17,7 +17,7 @@ fun CharacterDetailsRoute(
         viewModel.loadCharacter(characterId)
     }
 
-    CharacterDetailsScreen(
+    DetailsScreen(
         state = state,
         onBack = onBack
     )

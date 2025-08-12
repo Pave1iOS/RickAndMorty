@@ -1,12 +1,9 @@
 package com.example.rickandmorty.presentation.screens.mainScreen
 
-import android.app.Application
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.data.api.params.CharacterGender
 import com.example.rickandmorty.data.api.params.CharacterStatus
 import com.example.rickandmorty.domain.NetworkRepository
@@ -21,7 +18,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
-class MainScreenViewModel @Inject constructor(
+class MainViewModel @Inject constructor(
     private val repository: NetworkRepository
 ): ViewModel() {
 

@@ -20,7 +20,7 @@ import com.example.rickandmorty.presentation.composables.components.PropertySect
 import com.example.rickandmorty.utils.FakeData
 
 @Composable
-fun CharacterDetailsScreen(
+fun DetailsScreen(
     state: CharacterDetailsState,
     onBack: () -> Unit
 ) {
@@ -112,7 +112,7 @@ fun CharacterDetailsScreen(
 @Preview(showBackground = true)
 @Composable
 fun CharacterDetailScreenPreview() {
-    CharacterDetailsScreen(
+    DetailsScreen(
         state = CharacterDetailsState(character = FakeData.CHARACTER),
         onBack = {}
     )

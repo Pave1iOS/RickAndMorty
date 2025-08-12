@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class CharacterDetailsViewModel @Inject constructor(
+class DetailsViewModel @Inject constructor(
     private val repository: NetworkRepository
 ) : ViewModel() {
 

@@ -1,6 +1,6 @@
 package com.example.rickandmorty.presentation.screens.mainScreen
 
-import MainScreenContent
+import MainScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,7 +33,7 @@ import com.example.rickandmorty.utils.NetworkMonitor
 
 @Composable
 fun MainScreenContainer(
-    viewModel: MainScreenViewModel,
+    viewModel: MainViewModel,
     onClick: (Int) -> Unit = {}
 ) {
     val searchQuery by viewModel.searchQuery.collectAsState()
@@ -101,7 +101,7 @@ fun MainScreenContainer(
                 }
 
                 else -> {
-                    MainScreenContent(
+                    MainScreen(
                         rickAndMortyCharacters = characters,
                         searchQuery = searchQuery,
                         onSearchQueryChange = { viewModel.setSearchQuery(it) },
@@ -150,7 +150,7 @@ fun MainScreenContainerPreview() {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            MainScreenContent(
+            MainScreen(
                 rickAndMortyCharacters = pagingItems,
                 searchQuery = "",
                 onSearchQueryChange = {},

@@ -1,45 +1,134 @@
-package com.example.rickandmorty.presentation.screens.mainScreen
-
-import MainScreenContent
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.view.WindowCompat
-import androidx.lifecycle.ViewModelProvider
-import com.example.rickandmorty.App
-import com.example.rickandmorty.presentation.composables.AppNavHost
+import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import com.example.rickandmorty.data.api.RickAndMortyCharacter
+import com.example.rickandmorty.data.api.params.CharacterGender
+import com.example.rickandmorty.data.api.params.CharacterStatus
+import com.example.rickandmorty.presentation.composables.components.ButtonFilter
+import com.example.rickandmorty.presentation.composables.components.LoadIndicator
+import com.example.rickandmorty.presentation.composables.components.RefreshIndicator
+import com.example.rickandmorty.presentation.composables.sections.CharacterFilterScreen
+import com.example.rickandmorty.presentation.composables.sections.CharactersGridScreen
+import com.example.rickandmorty.presentation.composables.sections.SearchBar
 import com.example.rickandmorty.theme.RickAndMortyTheme
 import com.example.rickandmorty.utils.FakeData
 import com.example.rickandmorty.utils.FakeData.rememberFakeLazyPagingItems
-import javax.inject.Inject
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.launch
 
-class MainScreen : ComponentActivity() {
+@Composable
+fun MainScreen(
+    rickAndMortyCharacters: LazyPagingItems<RickAndMortyCharacter>,
+    searchQuery: String,
+    onSearchQueryChange: (String) -> Unit,
+    onFilterChange: (CharacterStatus?, CharacterGender?) -> Unit,
+    isRefreshing: Boolean = false,
+    onClick: (Int) -> Unit = {}
+) {
+    var showFilter by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+    val gridState = rememberLazyGridState()
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private val viewModel: MainScreenViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory)[MainScreenViewModel::class.java]
+    // Скролл вверх при обновлении списка
+    LaunchedEffect(rickAndMortyCharacters.loadState.refresh) {
+        if (rickAndMortyCharacters.loadState.refresh is LoadState.NotLoading &&
+            rickAndMortyCharacters.itemCount > 0
+        ) {
+            gridState.scrollToItem(0)
+        }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        App.get(this).appComponent.inject(this)
+    val isFirstLoad = rickAndMortyCharacters.loadState.refresh is LoadState.Loading &&
+            rickAndMortyCharacters.itemCount == 0
 
-        setContent {
-            RickAndMortyTheme {
-                MainScreenContainer(viewModel = viewModel)
+    Scaffold(
+        floatingActionButton = {
+            ButtonFilter(onClick = { showFilter = true })
+        }
+    ) { paddingValues ->
+
+        RickAndMortyTheme {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(10.dp)
+            ) {
+                SearchBar(
+                    modifier = Modifier.fillMaxWidth(),
+                    query = searchQuery,
+                    onQueryChange = onSearchQueryChange
+                )
+
+                Spacer(modifier = Modifier.size(10.dp))
+
+                if (isFirstLoad) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        LoadIndicator()
+                    }
+                } else {
+                    SwipeRefresh(
+                        state = rememberSwipeRefreshState(isRefreshing),
+                        onRefresh = { coroutineScope.launch { rickAndMortyCharacters.refresh() } },
+                        indicator = { state, _ ->
+                            Box(
+                                modifier = Modifier
+                                    .size(80.dp)
+                                    .padding(top = 12.dp),
+                                contentAlignment = Alignment.TopCenter
+                            ) {
+                                RefreshIndicator(isRefreshing = state.isRefreshing)
+                            }
+                        }
+                    ) {
+                        CharactersGridScreen(
+                            modifier = Modifier.fillMaxWidth(),
+                            rickAndMortyCharacters = rickAndMortyCharacters,
+                            gridState = gridState,
+                            onClick = onClick
+                        )
+                    }
+                }
             }
+        }
+
+        if (showFilter) {
+            CharacterFilterScreen(
+                onApplyFilter = { status, gender ->
+                    onFilterChange(status, gender)
+                    showFilter = false
+                }
+            )
         }
     }
 }
 
 @Preview
 @Composable
-fun MainScreenPreview() {
+fun MainScreenContentPreview() {
 
     val fakeList = List(6) {
         FakeData.CHARACTER
@@ -47,8 +136,12 @@ fun MainScreenPreview() {
 
     val pagingItems = rememberFakeLazyPagingItems(fakeList)
 
-    RickAndMortyTheme {
-        MainScreenContent(
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        MainScreen(
             rickAndMortyCharacters = pagingItems,
             searchQuery = "",
             onSearchQueryChange = {},

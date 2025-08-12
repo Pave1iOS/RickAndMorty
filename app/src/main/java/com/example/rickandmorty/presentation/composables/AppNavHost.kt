@@ -2,29 +2,27 @@ package com.example.rickandmorty.presentation.composables
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.*
 import androidx.navigation.navArgument
 import com.example.rickandmorty.App
-import com.example.rickandmorty.presentation.screens.detailScreen.CharacterDetailsScreen
-import com.example.rickandmorty.presentation.screens.detailScreen.CharacterDetailsViewModel
+import com.example.rickandmorty.presentation.screens.detailScreen.DetailsScreen
+import com.example.rickandmorty.presentation.screens.detailScreen.DetailsViewModel
 import com.example.rickandmorty.presentation.screens.mainScreen.MainScreenContainer
-import com.example.rickandmorty.presentation.screens.mainScreen.MainScreenViewModel
+import com.example.rickandmorty.presentation.screens.mainScreen.MainViewModel
 
 @Composable
-fun AppNavHost() {
+fun AppNavHost(factory: ViewModelProvider.Factory) {
     val navController = rememberNavController()
-    val factory = (LocalContext.current.applicationContext as App)
-        .appComponent
-        .viewModelFactory()
 
     NavHost(
         navController = navController,
         startDestination = "main"
     ) {
         composable("main") {
-            val mainViewModel: MainScreenViewModel = viewModel(factory = factory)
+            val mainViewModel: MainViewModel = viewModel(factory = factory)
             MainScreenContainer(
                 viewModel = mainViewModel,
                 onClick = { id -> navController.navigate("details/$id") }
@@ -36,17 +34,17 @@ fun AppNavHost() {
             arguments = listOf(navArgument("characterId") { type = NavType.IntType })
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getInt("characterId") ?: return@composable
-            val detailsViewModel: CharacterDetailsViewModel = viewModel(factory = factory)
-            val state by detailsViewModel.state.collectAsState()
+            val detailsViewModel: DetailsViewModel = viewModel(factory = factory)
+
+            DetailsScreen(
+                state = detailsViewModel.state.collectAsState().value,
+                onBack = { navController.popBackStack() }
+            )
 
             LaunchedEffect(id) {
                 detailsViewModel.loadCharacter(id)
             }
-
-            CharacterDetailsScreen(
-                state = state,
-                onBack = { navController.popBackStack() }
-            )
         }
     }
 }
+

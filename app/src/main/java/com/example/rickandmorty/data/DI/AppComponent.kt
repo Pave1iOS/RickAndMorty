@@ -2,7 +2,7 @@ package com.example.rickandmorty.data.DI
 
 import android.app.Application
 import androidx.lifecycle.ViewModelProvider
-import com.example.rickandmorty.presentation.screens.mainScreen.MainScreen
+import com.example.rickandmorty.presentation.screens.NavigationActivity
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -10,7 +10,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [AppModule::class, ViewModelModule::class])
 interface AppComponent {
-    fun inject(activity: MainScreen)
+    fun inject(activity: NavigationActivity)
 
     fun viewModelFactory(): ViewModelProvider.Factory
 
