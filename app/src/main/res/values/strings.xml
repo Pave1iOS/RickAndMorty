@@ -11,6 +11,7 @@
     <string name="character_image">Изображение персонажа - $1$s</string>
     <string name="character_status">Статус персонажа - $1$s</string>
     <string name="refresh_content">Обновление страницы</string>
+    <string name="error_loading_character">Ошибка загрузки персонажа</string>
     <string name="apply_filter">Применить фильтр</string>
     <string name="close_filter">Сбросить фильтр</string>
     <string name="offline_message">Соединение с интернетом прервано 🥲</string>
