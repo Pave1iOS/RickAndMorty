@@ -23,10 +23,11 @@ class MainViewModel @Inject constructor(
     private val repository: NetworkRepository
 ) : ViewModel() {
 
-    val statusFilter = MutableStateFlow<StatusFilter?>(null)
-    val genderFilter = MutableStateFlow<GenderFilter?>(null)
+    private val statusFilter = MutableStateFlow<StatusFilter?>(null)
+    private val genderFilter = MutableStateFlow<GenderFilter?>(null)
+    private val isFiltered = MutableStateFlow(false)
+
     val searchQuery = MutableStateFlow("")
-    val isFiltered = MutableStateFlow(false)
     val shouldScrollToTop = MutableStateFlow(false)
 
     private val _uiEvent = Channel<UiEvent>(Channel.BUFFERED)

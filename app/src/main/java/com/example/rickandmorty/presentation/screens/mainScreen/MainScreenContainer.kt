@@ -33,7 +33,6 @@ fun MainScreenContainer(
 
 
     var showFilter by remember { mutableStateOf(false) }
-    var loadIndicator by remember { mutableStateOf(true) }
 
     uiEvent?.let { event ->
         if (event is UiEvent.ShowMessage) {
@@ -51,12 +50,6 @@ fun MainScreenContainer(
         }
     }
 
-    LaunchedEffect(characters.isLoaded) {
-        if (characters.isLoaded) {
-            loadIndicator = false
-        }
-    }
-
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { padding ->
@@ -67,9 +60,8 @@ fun MainScreenContainer(
             contentAlignment = Alignment.Center
         ) {
             when {
-                characters.isFirstLoad -> LoadIndicator(
-                    isLoading = loadIndicator
-                )
+                characters.isFirstLoad -> LoadIndicator()
+
                 characters.isError -> ErrorWindowDialog(
                     text = "Ошибка загрузки данных",
                     onClick = { characters.retry() }
