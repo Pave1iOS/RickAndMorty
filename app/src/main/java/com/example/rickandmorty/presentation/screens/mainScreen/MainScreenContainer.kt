@@ -3,6 +3,7 @@ package com.example.rickandmorty.presentation.screens.mainScreen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -19,22 +20,20 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreenContainer(
-    onClick: (Int) -> Unit = {}
+    onClick: (Int) -> Unit = {},
+    gridState: LazyGridState
 ) {
     val viewModel: MainViewModel = daggerViewModel()
 
     val characters = viewModel.characters.collectAsLazyPagingItems()
     val snackbarHostState = remember { SnackbarHostState() }
-    val status by viewModel.statusFilter.collectAsState()
-    val gender by viewModel.genderFilter.collectAsState()
     val query by viewModel.searchQuery.collectAsState()
     val uiEvent by viewModel.uiEvent.collectAsState(initial = null)
-    val coroutineScope = rememberCoroutineScope()
+    val shouldScrollToTop by viewModel.shouldScrollToTop.collectAsState()
+
 
     var showFilter by remember { mutableStateOf(false) }
     var loadIndicator by remember { mutableStateOf(true) }
-
-    val gridState = rememberLazyGridState()
 
     uiEvent?.let { event ->
         if (event is UiEvent.ShowMessage) {
@@ -45,9 +44,10 @@ fun MainScreenContainer(
         }
     }
 
-    LaunchedEffect(status, gender, query) {
-        coroutineScope.launch {
+    LaunchedEffect(shouldScrollToTop) {
+        if (shouldScrollToTop) {
             gridState.animateScrollToItem(0)
+            viewModel.shouldScrollToTop.value = false
         }
     }
 

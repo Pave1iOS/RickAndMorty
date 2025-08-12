@@ -1,6 +1,8 @@
 package com.example.rickandmorty.presentation.composables
 
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,12 +15,17 @@ import com.example.rickandmorty.presentation.screens.mainScreen.MainScreenContai
 fun AppNavHost() {
     val navController = rememberNavController()
 
+    val gridState = rememberSaveable(saver = LazyGridState.Saver) {
+        LazyGridState()
+    }
+
     NavHost(
         navController = navController,
         startDestination = "main"
     ) {
         composable("main") {
             MainScreenContainer(
+                gridState = gridState,
                 onClick = { id -> navController.navigate("details/$id") }
             )
         }

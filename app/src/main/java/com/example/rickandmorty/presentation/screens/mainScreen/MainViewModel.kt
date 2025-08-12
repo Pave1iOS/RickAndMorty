@@ -27,6 +27,7 @@ class MainViewModel @Inject constructor(
     val genderFilter = MutableStateFlow<GenderFilter?>(null)
     val searchQuery = MutableStateFlow("")
     val isFiltered = MutableStateFlow(false)
+    val shouldScrollToTop = MutableStateFlow(false)
 
     private val _uiEvent = Channel<UiEvent>(Channel.BUFFERED)
     val uiEvent = _uiEvent.receiveAsFlow()
@@ -75,14 +76,26 @@ class MainViewModel @Inject constructor(
         }
     }
 
-
     fun resetFilters() {
         statusFilter.value = null
         genderFilter.value = null
         searchQuery.value = ""
     }
 
-    fun setStatusFilter(status: StatusFilter?) { statusFilter.value = status }
-    fun setGenderFilter(gender: GenderFilter?) { genderFilter.value = gender }
-    fun setSearchQuery(query: String) { searchQuery.value = query }
+    fun setStatusFilter(status: StatusFilter?) {
+        statusFilter.value = status
+        setShouldScrollToTop()
+    }
+    fun setGenderFilter(gender: GenderFilter?) {
+        genderFilter.value = gender
+        setShouldScrollToTop()
+    }
+    fun setSearchQuery(query: String) {
+        searchQuery.value = query
+        setShouldScrollToTop()
+    }
+
+    private fun setShouldScrollToTop() {
+        shouldScrollToTop.value = true
+    }
 }

@@ -40,12 +40,6 @@ fun MainScreen(
     gridState: LazyGridState
 ) {
 
-    LaunchedEffect(characters.itemSnapshotList.items) {
-        if (characters.itemCount > 0) {
-            gridState.scrollToItem(0)
-        }
-    }
-
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
 
