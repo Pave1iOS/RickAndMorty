@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,10 +36,15 @@ fun MainScreen(
     onRefresh: () -> Unit,
     isRefreshing: Boolean,
     isAppending: Boolean,
-    onFilterClick: () -> Unit
+    onFilterClick: () -> Unit,
+    gridState: LazyGridState
 ) {
 
-    val gridState = rememberLazyGridState()
+    LaunchedEffect(characters.itemSnapshotList.items) {
+        if (characters.itemCount > 0) {
+            gridState.scrollToItem(0)
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -53,7 +59,8 @@ fun MainScreen(
             SwipeRefresh(
                 state = rememberSwipeRefreshState(isRefreshing),
                 onRefresh = onRefresh,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
             ) {
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
@@ -120,7 +127,8 @@ fun MainScreenPreview() {
             isAppending = false,
             onFilterClick = {},
             query = "",
-            onQueryChange = {}
+            onQueryChange = {},
+            gridState = rememberLazyGridState()
         )
     }
 }

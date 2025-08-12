@@ -23,18 +23,18 @@ class MainViewModel @Inject constructor(
     private val repository: NetworkRepository
 ) : ViewModel() {
 
-    private val _statusFilter = MutableStateFlow<StatusFilter?>(null)
-    private val _genderFilter = MutableStateFlow<GenderFilter?>(null)
-    val _searchQuery = MutableStateFlow("")
+    val statusFilter = MutableStateFlow<StatusFilter?>(null)
+    val genderFilter = MutableStateFlow<GenderFilter?>(null)
+    val searchQuery = MutableStateFlow("")
     val isFiltered = MutableStateFlow(false)
 
     private val _uiEvent = Channel<UiEvent>(Channel.BUFFERED)
     val uiEvent = _uiEvent.receiveAsFlow()
 
     private val filters = combine(
-        _statusFilter,
-        _genderFilter,
-        _searchQuery.debounce(1000)
+        statusFilter,
+        genderFilter,
+        searchQuery.debounce(1000)
     ) { status, gender, query ->
         FilterParams(status, gender, query)
     }
@@ -77,12 +77,12 @@ class MainViewModel @Inject constructor(
 
 
     fun resetFilters() {
-        _statusFilter.value = null
-        _genderFilter.value = null
-        _searchQuery.value = ""
+        statusFilter.value = null
+        genderFilter.value = null
+        searchQuery.value = ""
     }
 
-    fun setStatusFilter(status: StatusFilter?) { _statusFilter.value = status }
-    fun setGenderFilter(gender: GenderFilter?) { _genderFilter.value = gender }
-    fun setSearchQuery(query: String) { _searchQuery.value = query }
+    fun setStatusFilter(status: StatusFilter?) { statusFilter.value = status }
+    fun setGenderFilter(gender: GenderFilter?) { genderFilter.value = gender }
+    fun setSearchQuery(query: String) { searchQuery.value = query }
 }
