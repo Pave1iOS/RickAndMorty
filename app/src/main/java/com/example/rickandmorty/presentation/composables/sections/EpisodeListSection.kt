@@ -4,11 +4,13 @@ import com.example.rickandmorty.presentation.composables.components.EpisodeCard
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
@@ -37,18 +39,32 @@ fun EpisodeListSection(
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         )
 
-        LazyRow(
+        BoxWithConstraints(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.3f)
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 10.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            .fillMaxWidth()
+            .fillMaxHeight(0.3f)
+            .padding(bottom = 10.dp)
         ) {
-            items(episodes) { episodeName ->
-                EpisodeCard(name = episodeName)
+
+            val containerWidth = maxWidth * 0.7f
+
+            LazyRow(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(episodes) { episodeName ->
+                    EpisodeCard(
+                        modifier = Modifier
+                            .width(containerWidth),
+                        name = episodeName
+                    )
+                }
             }
+
         }
+
+
     }
 }
 
