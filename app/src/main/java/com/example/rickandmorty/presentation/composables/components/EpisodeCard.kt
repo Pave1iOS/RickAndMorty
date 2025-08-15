@@ -1,20 +1,69 @@
 package com.example.rickandmorty.presentation.composables.components
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.rickandmorty.R
 
 @Composable
 fun EpisodeCard(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    name: String
 ) {
+
     Box(
         modifier = modifier
+            .fillMaxSize()
+            .clip(RoundedCornerShape(10.dp))
+            .border(
+                BorderStroke(1.dp, colorResource(R.color.secondary)),
+                RoundedCornerShape(10.dp)
+            )
+            .background(colorResource(R.color.black))
     ) {
 
+        Image(
+            modifier = Modifier
+                .matchParentSize()
+                .alpha(0.2f),
+            painter = painterResource(R.drawable.episode_bg),
+            contentScale = ContentScale.Crop,
+            contentDescription = stringResource(R.string.episode_descr, name)
+        )
+
+        Text(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(5.dp),
+            text = name,
+            textAlign = TextAlign.Center,
+            color = colorResource(R.color.text_name)
+        )
     }
 }
 
@@ -28,6 +77,8 @@ fun EpisodeCardPreview(
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        EpisodeCard()
+        EpisodeCard(
+            name = "Kiting OFF ON Stane"
+        )
     }
 }

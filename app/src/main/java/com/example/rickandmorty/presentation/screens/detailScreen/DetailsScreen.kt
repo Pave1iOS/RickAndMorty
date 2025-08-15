@@ -1,15 +1,21 @@
 package com.example.rickandmorty.presentation.screens.detailScreen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -33,9 +39,11 @@ import coil.compose.AsyncImage
 import com.example.rickandmorty.R
 import com.example.rickandmorty.data.api.params.GenderFilter
 import com.example.rickandmorty.data.api.params.StatusFilter
+import com.example.rickandmorty.presentation.composables.components.EpisodeCard
 import com.example.rickandmorty.presentation.composables.components.ErrorWindowDialog
 import com.example.rickandmorty.presentation.composables.components.LoadIndicator
 import com.example.rickandmorty.presentation.composables.components.PropertySection
+import com.example.rickandmorty.presentation.composables.sections.EpisodeListSection
 import com.example.rickandmorty.utils.FakeData
 
 @Composable
@@ -87,7 +95,9 @@ fun DetailsScreen(
             state.character != null -> {
                 val char = state.character
 
-                Box(modifier = Modifier.fillMaxSize()) {
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                ) {
                     AsyncImage(
                         modifier = Modifier.fillMaxSize(),
                         model = char.image,
@@ -98,39 +108,52 @@ fun DetailsScreen(
 
                     Column(
                         modifier = Modifier
-                            .fillMaxWidth(0.95f)
-                            .padding(bottom = 15.dp)
                             .align(Alignment.BottomCenter)
-                            .clip(RoundedCornerShape(15.dp))
-                            .alpha(0.9f)
-                            .background(colorResource(R.color.backgraund))
-                            .padding(16.dp),
-                        verticalArrangement = Arrangement.Bottom,
-                        horizontalAlignment = Alignment.CenterHorizontally
+                            .fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth(0.95f)
+                                .padding(bottom = 15.dp)
+                                .align(Alignment.CenterHorizontally)
+                                .clip(RoundedCornerShape(15.dp))
+                                .background(colorResource(R.color.backgraund).copy(alpha = 0.6f))
+                                .padding(16.dp),
+                            verticalArrangement = Arrangement.Bottom,
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Column(
-                                modifier = Modifier.weight(1f, fill = false),
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                PropertySection(text = "Status: ${char.status}")
-                                PropertySection(text = "Species: ${char.species}")
-                                PropertySection(text = "Gender: ${char.gender}")
-                            }
-                            Spacer(modifier = Modifier.width(5.dp))
-                            Column(
-                                modifier = Modifier.weight(1f, fill = false),
-                                verticalArrangement = Arrangement.spacedBy(8.dp),
-                                horizontalAlignment = Alignment.End
-                            ) {
-                                PropertySection(text = "Origin: ${char.origin.name}")
-                                PropertySection(text = "Location: ${char.location.name}")
-                                PropertySection(text = "Episodes: ${char.episode.size} серий(я)")
+                                Column(
+                                    modifier = Modifier
+                                        .weight(1f, fill = false),
+                                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    PropertySection(text = "Status: ${char.status}")
+                                    PropertySection(text = "Species: ${char.species}")
+                                    PropertySection(text = "Gender: ${char.gender}")
+                                }
+                                Spacer(modifier = Modifier.width(5.dp))
+                                Column(
+                                    modifier = Modifier.weight(1f, fill = false),
+                                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                                    horizontalAlignment = Alignment.End
+                                ) {
+                                    PropertySection(text = "Origin: ${char.origin.name}")
+                                    PropertySection(text = "Location: ${char.location.name}")
+                                }
                             }
                         }
+
+                        EpisodeListSection(
+                            title = stringResource(R.string.episode_title),
+                            episodes = char.episode
+                        )
+
                     }
                 }
             }

@@ -18,11 +18,13 @@
     <string name="online_message">Соединение с интернетом восстановленно 🚀</string>
     <string name="empty_list_message">Таких персонажей нет 🥲</string>
     <string name="refresh">Обновить</string>
+    <string name="episode_title">Episodes</string>
 
 <!-- descriptions -->
     <string name="icon_search">Иконка поиска</string>
     <string name="button_filter">Кнопка фильтра</string>
     <string name="sad_morty">Грустный Морти из за ошибки: $1$s</string>
+    <string name="episode_descr">Эпизод: $1$s</string>
 
 
 </resources>
