@@ -63,12 +63,11 @@ fun DetailsScreen(
                 backgroundColor = colorResource(R.color.backgraund)
             )
         },
-        backgroundColor = colorResource(R.color.black)
+        backgroundColor = colorResource(R.color.backgraund)
     ) { padding ->
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
                 .background(colorResource(R.color.backgraund))
         ) {
             AsyncImage(
@@ -80,8 +79,9 @@ fun DetailsScreen(
             )
 
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .align(Alignment.BottomCenter)
+                    .padding(padding)
                     .fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
