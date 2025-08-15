@@ -46,8 +46,7 @@ fun DetailsScreenContainer(
         ) {
             DetailsScreen(
                 state = state,
-                onBack = onBack,
-                onRetry = { viewModel.loadCharacter(characterId) }
+                onBack = onBack
             )
         }
     }

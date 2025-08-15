@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -38,6 +39,11 @@ fun EpisodeCard(
     Box(
         modifier = modifier
             .fillMaxSize()
+            .shadow(
+                elevation = 8.dp,
+                shape = RoundedCornerShape(10.dp),
+                clip = false
+            )
             .clip(RoundedCornerShape(10.dp))
             .border(
                 BorderStroke(1.dp, colorResource(R.color.secondary)),

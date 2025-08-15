@@ -41,8 +41,7 @@ import com.example.rickandmorty.utils.FakeData
 @Composable
 fun DetailsScreen(
     state: CharacterDetailsState,
-    onBack: () -> Unit,
-    onRetry: () -> Unit
+    onBack: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -70,6 +69,7 @@ fun DetailsScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
+                        .background(colorResource(R.color.black))
                         .padding(padding),
                     contentAlignment = Alignment.Center
                 ) {
@@ -80,7 +80,7 @@ fun DetailsScreen(
             state.error != null -> {
                 ErrorWindowDialog(
                     text = stringResource(R.string.error_loading_character),
-                    onClick = onRetry
+                    onClick = onBack
                 )
             }
 
@@ -173,7 +173,6 @@ fun DetailsScreenPreview() {
             isLoading = false,
             error = null
         ),
-        onBack = {},
-        onRetry = {}
+        onBack = {}
     )
 }
