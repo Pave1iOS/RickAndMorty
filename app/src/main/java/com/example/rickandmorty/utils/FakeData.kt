@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.rickandmorty.data.api.Episode
 import com.example.rickandmorty.data.api.Location
 import com.example.rickandmorty.data.api.Origin
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
@@ -27,6 +28,17 @@ object FakeData {
         url = "",
         created = ""
     )
+
+    val EPISODE = Episode(
+        id = 1,
+        name = "ASDFGH",
+        airDate = "DATE",
+        episode = "S01E01",
+        characters = listOf("CHAR"),
+        url = "",
+        created = ""
+    )
+
 
     @Composable
     fun rememberFakeLazyPagingItems(characters: List<RickAndMortyCharacter>): LazyPagingItems<RickAndMortyCharacter> {

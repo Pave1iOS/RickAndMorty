@@ -4,25 +4,19 @@ import com.example.rickandmorty.data.api.params.GenderFilter
 import com.example.rickandmorty.data.api.params.StatusFilter
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.sql.Date
 
 @Serializable
 data class CharacterResponse(
-    @SerialName("info")
     val info: Info,
-
-    @SerialName("results")
     val results: List<RickAndMortyCharacter>
 )
 
 @Serializable
 data class Info(
-    @SerialName("count")
     val count: Int,
-    @SerialName("pages")
     val pages: Int,
-    @SerialName("next")
     val next: String? = null,
-    @SerialName("prev")
     val prev: String? = null
 )
 
@@ -50,6 +44,17 @@ data class RickAndMortyCharacter(
     val location: Location,
     val image: String,
     val episode: List<String>,
+    val url: String,
+    val created: String
+)
+
+@Serializable
+data class Episode(
+    val id: Int,
+    val name: String,
+    @SerialName("air_date") val airDate: String,
+    val episode: String,
+    val characters: List<String>,
     val url: String,
     val created: String
 )

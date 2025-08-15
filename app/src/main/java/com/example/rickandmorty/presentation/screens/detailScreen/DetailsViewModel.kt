@@ -3,6 +3,7 @@ package com.example.rickandmorty.presentation.screens.detailScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rickandmorty.R
+import com.example.rickandmorty.data.api.Episode
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.domain.NetworkRepository
 import com.example.rickandmorty.utils.UiEvent
@@ -28,7 +29,13 @@ class DetailsViewModel @Inject constructor(
             _state.value = _state.value.copy(isLoading = true, error = null)
             try {
                 val character = repository.fetchCharacterById(id)
-                _state.value = CharacterDetailsState(character = character, isLoading = false)
+                val episodes = repository.getCharacterEpisodes(character)
+
+                _state.value = CharacterDetailsState(
+                    character = character,
+                    episodes = episodes,
+                    isLoading = false
+                )
             } catch (e: Exception) {
                 _state.value = _state.value.copy(isLoading = false, error = e.localizedMessage)
                 _uiEvent.send(UiEvent.ShowMessage(R.string.error_loading_character))
@@ -39,6 +46,7 @@ class DetailsViewModel @Inject constructor(
 
 data class CharacterDetailsState(
     val character: RickAndMortyCharacter? = null,
+    val episodes: List<Episode> = emptyList(),
     val isLoading: Boolean = false,
     val error: String? = null
 )

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.example.rickandmorty.data.api.Episode
 import com.example.rickandmorty.data.api.RickAndMortyAPI
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.data.database.AppDatabase
@@ -17,6 +18,16 @@ class NetworkRepository @Inject constructor(
     private val api: RickAndMortyAPI,
     private val database: AppDatabase
 ) {
+
+    suspend fun getCharacterEpisodes(character: RickAndMortyCharacter): List<Episode> {
+        val episodeID = character.episode.map {
+            it.substringAfterLast("/")
+        }
+
+        val idsString = episodeID.joinToString(",")
+
+        return api.getEpisodesByIds(idsString)
+    }
 
     suspend fun fetchCharacterById(id: Int): RickAndMortyCharacter {
         Log.i(TAG, "${LogSource.NETWORK} fetching character with id = $id")

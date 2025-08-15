@@ -17,4 +17,6 @@ interface RickAndMortyAPI {
         @Query("gender") gender: String? = null
     ): CharacterResponse
 
+    @GET("episode/{ids}")
+    suspend fun getEpisodesByIds(@Path("ids") ids: String): List<Episode>
 }

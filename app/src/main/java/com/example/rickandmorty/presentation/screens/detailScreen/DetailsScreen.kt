@@ -1,21 +1,15 @@
 package com.example.rickandmorty.presentation.screens.detailScreen
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -27,7 +21,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
@@ -39,7 +32,6 @@ import coil.compose.AsyncImage
 import com.example.rickandmorty.R
 import com.example.rickandmorty.data.api.params.GenderFilter
 import com.example.rickandmorty.data.api.params.StatusFilter
-import com.example.rickandmorty.presentation.composables.components.EpisodeCard
 import com.example.rickandmorty.presentation.composables.components.ErrorWindowDialog
 import com.example.rickandmorty.presentation.composables.components.LoadIndicator
 import com.example.rickandmorty.presentation.composables.components.PropertySection
@@ -93,15 +85,16 @@ fun DetailsScreen(
             }
 
             state.character != null -> {
-                val char = state.character
+                val character = state.character
+                val episodesInfo = state.episodes
 
                 Box(modifier = Modifier
                     .fillMaxSize()
                 ) {
                     AsyncImage(
                         modifier = Modifier.fillMaxSize(),
-                        model = char.image,
-                        contentDescription = char.name,
+                        model = character.image,
+                        contentDescription = character.name,
                         placeholder = painterResource(R.drawable.placeholder),
                         contentScale = ContentScale.Crop
                     )
@@ -133,9 +126,9 @@ fun DetailsScreen(
                                         .weight(1f, fill = false),
                                     verticalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
-                                    PropertySection(text = "Status: ${char.status}")
-                                    PropertySection(text = "Species: ${char.species}")
-                                    PropertySection(text = "Gender: ${char.gender}")
+                                    PropertySection(text = "Status: ${character.status}")
+                                    PropertySection(text = "Species: ${character.species}")
+                                    PropertySection(text = "Gender: ${character.gender}")
                                 }
                                 Spacer(modifier = Modifier.width(5.dp))
                                 Column(
@@ -143,15 +136,16 @@ fun DetailsScreen(
                                     verticalArrangement = Arrangement.spacedBy(8.dp),
                                     horizontalAlignment = Alignment.End
                                 ) {
-                                    PropertySection(text = "Origin: ${char.origin.name}")
-                                    PropertySection(text = "Location: ${char.location.name}")
+                                    PropertySection(text = "Origin: ${character.origin.name}")
+                                    PropertySection(text = "Location: ${character.location.name}")
                                 }
                             }
                         }
 
                         EpisodeListSection(
                             title = stringResource(R.string.episode_title),
-                            episodes = char.episode
+                            episodeCount = character.episode.size,
+                            episodes = episodesInfo
                         )
 
                     }
@@ -175,6 +169,7 @@ fun DetailsScreenPreview() {
                 location = FakeData.CHARACTER.location.copy(name = "Citadel of Ricks"),
                 episode = List(12) { "Episode ${it + 1}" }
             ),
+            episodes = List(10) { FakeData.EPISODE },
             isLoading = false,
             error = null
         ),

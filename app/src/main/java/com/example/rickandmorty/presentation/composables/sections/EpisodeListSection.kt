@@ -21,11 +21,14 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rickandmorty.R
+import com.example.rickandmorty.data.api.Episode
+import com.example.rickandmorty.utils.FakeData
 
 @Composable
 fun EpisodeListSection(
     title: String,
-    episodes: List<String>
+    episodeCount: Int? = null,
+    episodes: List<Episode>
 ) {
     Column(
         modifier = Modifier
@@ -33,7 +36,13 @@ fun EpisodeListSection(
             .background(colorResource(R.color.backgraund).copy(alpha = 0.5f))
     ) {
         Text(
-            text = title,
+            text = buildString {
+                append(title)
+                if (episodeCount != null) {
+                    append(" ")
+                    append(episodeCount)
+                }
+            },
             color = colorResource(R.color.text_name),
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -53,11 +62,12 @@ fun EpisodeListSection(
                     .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(episodes) { episodeName ->
+                items(episodes) { ep ->
                     EpisodeCard(
                         modifier = Modifier
                             .width(containerWidth),
-                        name = episodeName
+                        episodeName = ep.name,
+                        episodeNumber = ep.episode
                     )
                 }
             }
@@ -72,13 +82,13 @@ fun EpisodeListSection(
 @Composable
 fun EpisodeListSectionPreview() {
 
-    val episodes = List(12) { "Episodes ${it + 1}" }
+    val episodes = List(10) { FakeData.EPISODE }
 
     Box(
         modifier = Modifier
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        EpisodeListSection("Episodes",episodes)
+        EpisodeListSection("Episodes", episodes = episodes)
     }
 }
