@@ -40,7 +40,7 @@ fun EpisodeCard(
         modifier = modifier
             .fillMaxSize()
             .shadow(
-                elevation = 8.dp,
+                elevation = 3.dp,
                 shape = RoundedCornerShape(10.dp),
                 clip = false
             )
