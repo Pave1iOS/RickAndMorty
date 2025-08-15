@@ -62,7 +62,8 @@ fun DetailsScreenContainer(
                     DetailsScreen(
                         character = character,
                         episodes = state.episodes,
-                        onBack = onBack
+                        onBack = onBack,
+                        modifier = Modifier.padding(padding)
                     )
                 }
             }

@@ -44,7 +44,8 @@ import com.example.rickandmorty.utils.FakeData
 fun DetailsScreen(
     character: RickAndMortyCharacter,
     episodes: List<Episode>,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = {
@@ -62,11 +63,12 @@ fun DetailsScreen(
                 backgroundColor = colorResource(R.color.backgraund)
             )
         },
-        containerColor = colorResource(R.color.backgraund)
+        backgroundColor = colorResource(R.color.black)
     ) { padding ->
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
+                .padding(padding)
                 .background(colorResource(R.color.backgraund))
         ) {
             AsyncImage(
@@ -80,7 +82,6 @@ fun DetailsScreen(
             Column(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = padding.calculateBottomPadding())
                     .fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
