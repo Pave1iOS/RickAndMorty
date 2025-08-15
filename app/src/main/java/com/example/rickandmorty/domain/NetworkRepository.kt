@@ -20,13 +20,19 @@ class NetworkRepository @Inject constructor(
 ) {
 
     suspend fun getCharacterEpisodes(character: RickAndMortyCharacter): List<Episode> {
-        val episodeID = character.episode.map {
-            it.substringAfterLast("/")
+        val episodeID = character.episode.map { it.substringAfterLast("/") }
+
+        return if (episodeID.size == 1) {
+            val episode = listOf(api.getEpisodeByID(episodeID.first()))
+            Log.i(TAG, "${LogSource.NETWORK} fetching episode: $episode")
+
+            episode
+        } else {
+            val episodes = api.getEpisodesByIDs(episodeID.joinToString(","))
+            Log.i(TAG, "${LogSource.NETWORK} fetching episodes: $episodes")
+
+            episodes
         }
-
-        val idsString = episodeID.joinToString(",")
-
-        return api.getEpisodesByIds(idsString)
     }
 
     suspend fun fetchCharacterById(id: Int): RickAndMortyCharacter {

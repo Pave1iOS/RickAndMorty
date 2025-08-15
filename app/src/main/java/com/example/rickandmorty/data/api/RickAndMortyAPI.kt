@@ -18,5 +18,8 @@ interface RickAndMortyAPI {
     ): CharacterResponse
 
     @GET("episode/{ids}")
-    suspend fun getEpisodesByIds(@Path("ids") ids: String): List<Episode>
+    suspend fun getEpisodesByIDs(@Path("ids") ids: String): List<Episode>
+
+    @GET("episode/{id}")
+    suspend fun getEpisodeByID(@Path("id") id: String): Episode
 }
