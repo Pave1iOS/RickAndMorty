@@ -30,6 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.rickandmorty.R
+import com.example.rickandmorty.data.api.Episode
+import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.data.api.params.GenderFilter
 import com.example.rickandmorty.data.api.params.StatusFilter
 import com.example.rickandmorty.presentation.composables.components.ErrorWindowDialog
@@ -40,16 +42,14 @@ import com.example.rickandmorty.utils.FakeData
 
 @Composable
 fun DetailsScreen(
-    state: CharacterDetailsState,
+    character: RickAndMortyCharacter,
+    episodes: List<Episode>,
     onBack: () -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(
-                    color = colorResource(R.color.text_name),
-                    text = state.character?.name.orEmpty()
-                ) },
+                title = { Text(character.name, color = colorResource(R.color.text_name)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
@@ -60,119 +60,98 @@ fun DetailsScreen(
                     }
                 },
                 backgroundColor = colorResource(R.color.backgraund)
-
             )
-        }
+        },
+        containerColor = colorResource(R.color.backgraund)
     ) { padding ->
-        when {
-            state.isLoading -> {
-                Box(
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(colorResource(R.color.backgraund))
+        ) {
+            AsyncImage(
+                modifier = Modifier.fillMaxSize(),
+                model = character.image,
+                contentDescription = character.name,
+                placeholder = painterResource(R.drawable.placeholder),
+                contentScale = ContentScale.Crop
+            )
+
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = padding.calculateBottomPadding())
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Column(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(colorResource(R.color.black))
-                        .padding(padding),
-                    contentAlignment = Alignment.Center
+                        .fillMaxWidth(0.95f)
+                        .padding(bottom = 15.dp)
+                        .align(Alignment.CenterHorizontally)
+                        .clip(RoundedCornerShape(15.dp))
+                        .background(colorResource(R.color.backgraund).copy(alpha = 0.6f))
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.Bottom,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    LoadIndicator()
-                }
-            }
-
-            state.error != null -> {
-                ErrorWindowDialog(
-                    text = stringResource(R.string.error_loading_character),
-                    onClick = onBack
-                )
-            }
-
-            state.character != null -> {
-                val character = state.character
-                val episodesInfo = state.episodes
-
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                ) {
-                    AsyncImage(
-                        modifier = Modifier.fillMaxSize(),
-                        model = character.image,
-                        contentDescription = character.name,
-                        placeholder = painterResource(R.drawable.placeholder),
-                        contentScale = ContentScale.Crop
-                    )
-
-                    Column(
+                    Row(
                         modifier = Modifier
-                            .align(Alignment.BottomCenter)
                             .fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Column(
                             modifier = Modifier
-                                .fillMaxWidth(0.95f)
-                                .padding(bottom = 15.dp)
-                                .align(Alignment.CenterHorizontally)
-                                .clip(RoundedCornerShape(15.dp))
-                                .background(colorResource(R.color.backgraund).copy(alpha = 0.6f))
-                                .padding(16.dp),
-                            verticalArrangement = Arrangement.Bottom,
-                            horizontalAlignment = Alignment.CenterHorizontally
+                                .weight(1f, fill = false),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Column(
-                                    modifier = Modifier
-                                        .weight(1f, fill = false),
-                                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                                ) {
-                                    PropertySection(text = "Status: ${character.status}")
-                                    PropertySection(text = "Species: ${character.species}")
-                                    PropertySection(text = "Gender: ${character.gender}")
-                                }
-                                Spacer(modifier = Modifier.width(5.dp))
-                                Column(
-                                    modifier = Modifier.weight(1f, fill = false),
-                                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                                    horizontalAlignment = Alignment.End
-                                ) {
-                                    PropertySection(text = "Origin: ${character.origin.name}")
-                                    PropertySection(text = "Location: ${character.location.name}")
-                                }
-                            }
+                            PropertySection(text = "Status: ${character.status}")
+                            PropertySection(text = "Species: ${character.species}")
+                            PropertySection(text = "Gender: ${character.gender}")
                         }
-
-                        EpisodeListSection(
-                            title = stringResource(R.string.episode_title),
-                            episodeCount = character.episode.size,
-                            episodes = episodesInfo
-                        )
-
+                        Spacer(modifier = Modifier.width(5.dp))
+                        Column(
+                            modifier = Modifier.weight(1f, fill = false),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            horizontalAlignment = Alignment.End
+                        ) {
+                            PropertySection(text = "Origin: ${character.origin.name}")
+                            PropertySection(text = "Location: ${character.location.name}")
+                        }
                     }
                 }
+
+                EpisodeListSection(
+                    title = stringResource(R.string.episode_title),
+                    episodeCount = character.episode.size,
+                    episodes = episodes
+                )
+
             }
         }
     }
 }
 
-@Preview
+
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    device = "id:pixel_5"
+)
 @Composable
 fun DetailsScreenPreview() {
     DetailsScreen(
-        state = CharacterDetailsState(
-            character = FakeData.CHARACTER.copy(
-                name = "Rick Sanchez",
-                status = StatusFilter.ALIVE,
-                species = "Human",
-                gender = GenderFilter.GENDERLESS,
-                origin = FakeData.CHARACTER.origin.copy(name = "Earth (C-137)"),
-                location = FakeData.CHARACTER.location.copy(name = "Citadel of Ricks"),
-                episode = List(12) { "Episode ${it + 1}" }
-            ),
-            episodes = List(10) { FakeData.EPISODE },
-            isLoading = false,
-            error = null
+        character = FakeData.CHARACTER.copy(
+            name = "Rick Sanchez",
+            status = StatusFilter.ALIVE,
+            species = "Human",
+            gender = GenderFilter.GENDERLESS,
+            origin = FakeData.CHARACTER.origin.copy(name = "Earth (C-137)"),
+            location = FakeData.CHARACTER.location.copy(name = "Citadel of Ricks"),
+            episode = List(12) { "Episode ${it + 1}" }
         ),
+        episodes = List(10) { FakeData.EPISODE },
         onBack = {}
     )
 }
+

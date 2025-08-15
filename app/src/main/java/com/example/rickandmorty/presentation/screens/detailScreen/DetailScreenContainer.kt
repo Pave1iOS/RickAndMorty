@@ -8,6 +8,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.example.rickandmorty.R
+import com.example.rickandmorty.presentation.composables.components.ErrorWindowDialog
+import com.example.rickandmorty.presentation.composables.components.LoadIndicator
 import com.example.rickandmorty.utils.UiEvent
 import com.example.rickandmorty.utils.daggerViewModel
 
@@ -17,7 +20,6 @@ fun DetailsScreenContainer(
     onBack: () -> Unit
 ) {
     val viewModel: DetailsViewModel = daggerViewModel()
-
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val uiEvent by viewModel.uiEvent.collectAsState(initial = null)
@@ -35,19 +37,36 @@ fun DetailsScreenContainer(
         }
     }
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) }
-    ) { padding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
-            contentAlignment = Alignment.Center
-        ) {
-            DetailsScreen(
-                state = state,
-                onBack = onBack
-            )
+    Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }) { padding ->
+        when {
+            state.isLoading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    LoadIndicator()
+                }
+            }
+
+            state.error != null -> {
+                ErrorWindowDialog(
+                    text = stringResource(R.string.error_loading_character),
+                    onClick = onBack
+                )
+            }
+
+            state.character != null -> {
+                state.character?.let { character ->
+                    DetailsScreen(
+                        character = character,
+                        episodes = state.episodes,
+                        onBack = onBack
+                    )
+                }
+            }
         }
     }
 }
+
