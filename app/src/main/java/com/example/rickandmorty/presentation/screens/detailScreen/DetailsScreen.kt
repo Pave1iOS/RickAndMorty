@@ -38,8 +38,6 @@ import com.example.rickandmorty.data.api.Episode
 import com.example.rickandmorty.data.api.RickAndMortyCharacter
 import com.example.rickandmorty.data.api.params.GenderFilter
 import com.example.rickandmorty.data.api.params.StatusFilter
-import com.example.rickandmorty.presentation.composables.components.ErrorWindowDialog
-import com.example.rickandmorty.presentation.composables.components.LoadIndicator
 import com.example.rickandmorty.presentation.composables.components.PropertySection
 import com.example.rickandmorty.presentation.composables.sections.EpisodeListSection
 import com.example.rickandmorty.utils.FakeData
