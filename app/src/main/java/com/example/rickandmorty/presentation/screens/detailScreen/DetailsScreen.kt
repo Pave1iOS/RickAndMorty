@@ -42,7 +42,7 @@ fun DetailsScreen(
             .fillMaxSize()
             .background(colorResource(R.color.backgraund))
     ) {
-        // фон — картинка персонажа
+
         AsyncImage(
             modifier = Modifier.fillMaxSize(),
             model = character.image,
@@ -51,7 +51,6 @@ fun DetailsScreen(
             contentScale = ContentScale.Crop
         )
 
-        // верхняя панель
         TopAppBar(
             title = { Text(character.name, color = colorResource(R.color.text_name)) },
             navigationIcon = {
@@ -69,17 +68,6 @@ fun DetailsScreen(
                 .zIndex(2f)
         )
 
-        // нижняя затемнённая подложка под навбар
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .windowInsetsBottomHeight(WindowInsets.navigationBars)
-                .background(colorResource(R.color.backgraund).copy(alpha = 0.5f))
-                .zIndex(1f)
-        )
-
-        // контент
         Column(
             modifier = modifier
                 .align(Alignment.BottomCenter)
@@ -124,7 +112,8 @@ fun DetailsScreen(
             EpisodeListSection(
                 title = stringResource(R.string.episode_title),
                 episodeCount = character.episode.size,
-                episodes = episodes
+                episodes = episodes,
+                modifier = Modifier
             )
         }
     }

@@ -28,7 +28,8 @@ import com.example.rickandmorty.utils.FakeData
 fun EpisodeListSection(
     title: String,
     episodeCount: Int? = null,
-    episodes: List<Episode>
+    episodes: List<Episode>,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = Modifier
@@ -49,10 +50,10 @@ fun EpisodeListSection(
         )
 
         BoxWithConstraints(
-            modifier = Modifier
+            modifier = modifier
             .fillMaxWidth()
             .fillMaxHeight(0.3f)
-            .padding(bottom = 10.dp)
+            .padding(20.dp)
         ) {
 
             val containerWidth = maxWidth * 0.7f
