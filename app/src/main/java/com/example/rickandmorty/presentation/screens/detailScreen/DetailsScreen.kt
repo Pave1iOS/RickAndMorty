@@ -1,22 +1,10 @@
 package com.example.rickandmorty.presentation.screens.detailScreen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -49,101 +37,98 @@ fun DetailsScreen(
     onBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(character.name, color = colorResource(R.color.text_name)) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(
-                            tint = colorResource(R.color.text_name),
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.back)
-                        )
-                    }
-                },
-                backgroundColor = colorResource(R.color.backgraund)
-            )
-        },
-        backgroundColor = colorResource(R.color.backgraund)
-    ) { padding ->
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(R.color.backgraund))
+    ) {
+        // фон — картинка персонажа
+        AsyncImage(
+            modifier = Modifier.fillMaxSize(),
+            model = character.image,
+            contentDescription = character.name,
+            placeholder = painterResource(R.drawable.placeholder),
+            contentScale = ContentScale.Crop
+        )
+
+        // верхняя панель
+        TopAppBar(
+            title = { Text(character.name, color = colorResource(R.color.text_name)) },
+            navigationIcon = {
+                IconButton(onClick = onBack) {
+                    Icon(
+                        tint = colorResource(R.color.text_name),
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.back)
+                    )
+                }
+            },
+            backgroundColor = colorResource(R.color.backgraund).copy(alpha = 0.7f),
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .zIndex(2f)
+        )
+
+        // нижняя затемнённая подложка под навбар
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .background(colorResource(R.color.backgraund))
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .windowInsetsBottomHeight(WindowInsets.navigationBars)
+                .background(colorResource(R.color.backgraund).copy(alpha = 0.5f))
+                .zIndex(1f)
+        )
+
+        // контент
+        Column(
+            modifier = modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            AsyncImage(
-                modifier = Modifier.fillMaxSize(),
-                model = character.image,
-                contentDescription = character.name,
-                placeholder = painterResource(R.drawable.placeholder),
-                contentScale = ContentScale.Crop
-            )
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-                    .windowInsetsBottomHeight(WindowInsets.navigationBars)
-                    .background(colorResource(R.color.backgraund).copy(alpha = 0.5f))
-                    .zIndex(1f)
-            )
-
             Column(
-                modifier = modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(padding)
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                modifier = Modifier
+                    .fillMaxWidth(0.95f)
+                    .padding(bottom = 15.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .clip(RoundedCornerShape(15.dp))
+                    .background(colorResource(R.color.backgraund).copy(alpha = 0.6f))
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth(0.95f)
-                        .padding(bottom = 15.dp)
-                        .align(Alignment.CenterHorizontally)
-                        .clip(RoundedCornerShape(15.dp))
-                        .background(colorResource(R.color.backgraund).copy(alpha = 0.6f))
-                        .padding(16.dp),
-                    verticalArrangement = Arrangement.Bottom,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                    Column(
+                        modifier = Modifier.weight(1f, fill = false),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Column(
-                            modifier = Modifier
-                                .weight(1f, fill = false),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            PropertySection(text = "Status: ${character.status}")
-                            PropertySection(text = "Species: ${character.species}")
-                            PropertySection(text = "Gender: ${character.gender}")
-                        }
-                        Spacer(modifier = Modifier.width(5.dp))
-                        Column(
-                            modifier = Modifier.weight(1f, fill = false),
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                            horizontalAlignment = Alignment.End
-                        ) {
-                            PropertySection(text = "Origin: ${character.origin.name}")
-                            PropertySection(text = "Location: ${character.location.name}")
-                        }
+                        PropertySection(text = "Status: ${character.status}")
+                        PropertySection(text = "Species: ${character.species}")
+                        PropertySection(text = "Gender: ${character.gender}")
+                    }
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Column(
+                        modifier = Modifier.weight(1f, fill = false),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalAlignment = Alignment.End
+                    ) {
+                        PropertySection(text = "Origin: ${character.origin.name}")
+                        PropertySection(text = "Location: ${character.location.name}")
                     }
                 }
-
-                EpisodeListSection(
-                    title = stringResource(R.string.episode_title),
-                    episodeCount = character.episode.size,
-                    episodes = episodes
-                )
-
             }
+
+            EpisodeListSection(
+                title = stringResource(R.string.episode_title),
+                episodeCount = character.episode.size,
+                episodes = episodes
+            )
         }
     }
 }
-
 
 @Preview(
     showBackground = true,
@@ -166,4 +151,3 @@ fun DetailsScreenPreview() {
         onBack = {}
     )
 }
-

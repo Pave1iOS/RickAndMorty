@@ -3,12 +3,20 @@ package com.example.rickandmorty.presentation.screens.detailScreen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.example.rickandmorty.R
+import com.example.rickandmorty.presentation.composables.components.CustomSnackbar
 import com.example.rickandmorty.presentation.composables.components.ErrorWindowDialog
 import com.example.rickandmorty.presentation.composables.components.LoadIndicator
 import com.example.rickandmorty.utils.UiEvent
@@ -37,13 +45,15 @@ fun DetailsScreenContainer(
         }
     }
 
-    Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }) { padding ->
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
         when {
             state.isLoading -> {
                 Box(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(padding),
+                        .fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
                     LoadIndicator()
@@ -63,11 +73,20 @@ fun DetailsScreenContainer(
                         character = character,
                         episodes = state.episodes,
                         onBack = onBack,
-                        modifier = Modifier.padding(padding)
+                        modifier = Modifier
                     )
                 }
             }
         }
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            snackbar = { data -> CustomSnackbar(data) },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(8.dp)
+        )
     }
 }
+
 

@@ -40,8 +40,14 @@ fun MainScreen(
     gridState: LazyGridState
 ) {
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
 
             SearchBar(
                 query = query,
@@ -85,10 +91,10 @@ fun MainScreen(
         }
 
         ButtonFilter(
+            onClick = onFilterClick,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp),
-            onClick = onFilterClick
         )
     }
 }
