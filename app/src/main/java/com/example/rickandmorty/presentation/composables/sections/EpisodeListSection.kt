@@ -38,11 +38,12 @@ fun EpisodeListSection(
     ) {
         Text(
             text = buildString {
-                append(title)
+
                 if (episodeCount != null) {
-                    append(" ")
                     append(episodeCount)
+                    append(" ")
                 }
+                append(title)
             },
             color = colorResource(R.color.text_name),
             modifier = Modifier
@@ -53,14 +54,13 @@ fun EpisodeListSection(
             modifier = modifier
             .fillMaxWidth()
             .fillMaxHeight(0.3f)
-            .padding(20.dp)
+            .padding(top = 20.dp, bottom = 20.dp)
         ) {
 
             val containerWidth = maxWidth * 0.7f
 
             LazyRow(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp),
+                modifier = Modifier,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(episodes) { ep ->

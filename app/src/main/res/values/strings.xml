@@ -18,7 +18,7 @@
     <string name="online_message">Соединение с интернетом восстановленно 🚀</string>
     <string name="empty_list_message">Таких персонажей нет 🥲</string>
     <string name="refresh">Обновить</string>
-    <string name="episode_title">Episodes</string>
+    <string name="episode_title">episode</string>
 
 <!-- descriptions -->
     <string name="icon_search">Иконка поиска</string>
